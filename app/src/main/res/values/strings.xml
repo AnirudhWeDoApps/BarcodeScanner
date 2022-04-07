@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">Barcode Scanner</string>
+    <string name="Rs">\u20B9</string>
+    <string name="permission_required">Permission are requried access the app.</string>
+    <string name="ok">OK</string>
+    <string name="permission_granted">Permission is granted. You can use now.</string>
+    <string name="username_your_items_are_ready">Your Items are ready</string>
+    <string name="min_stock">The Minimum Stock should be</string>
+    <string name="empty_list">Empty</string>
+    <string name="start_search">Start Search</string>
+    <string name="md_expand_more">Expand</string>
+    <string name="search">Search</string>
+    <string name="done_search">Done</string>
+    <string name="md_expand_less">Less</string>
+    <string name="select_user_name">Select User</string>
+    <string name="add_party">Add User</string>
+</resources>
