@@ -40,9 +40,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/_10sdp"
-        app:backgroundTint="@color/purple_500"
+        app:backgroundTint="@color/colorPrimary"
         app:icon="@drawable/ic_details"
-        app:iconTint="@color/white"
+        app:iconTint="@color/ColorPrimaryTextColor"
         android:layout_marginEnd="@dimen/_10sdp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />

@@ -85,7 +85,7 @@ class AddItemAlertDialog : DialogFragment() {
                                 .toInt(),
                             binding.inputQuantity.editText?.text.toString().toInt(),
                         )
-                        updateScannedData(false)
+//                        updateScannedData(false)
                         dismiss()
                         listener.onSheetClose(false)
                     } else {
@@ -99,7 +99,7 @@ class AddItemAlertDialog : DialogFragment() {
                             count = binding.inputQuantity.editText?.text.toString().toInt(),
                             minCount = emptyMin()
                         )
-                        updateScannedData(false)
+//                        updateScannedData(false)
                         dismiss()
                         listener.onSheetClose(false)
                     }

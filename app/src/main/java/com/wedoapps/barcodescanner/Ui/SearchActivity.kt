@@ -1,7 +1,6 @@
 package com.wedoapps.barcodescanner.Ui
 
 import android.content.Intent
-import android.graphics.Color
 import android.graphics.PorterDuff
 import android.os.Bundle
 import android.view.Menu
@@ -12,6 +11,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.wedoapps.barcodescanner.Adapter.BarcodeDataRecyclerAdapter
 import com.wedoapps.barcodescanner.BarcodeViewModel
@@ -96,7 +96,10 @@ class SearchActivity : AppCompatActivity(), BarcodeDataRecyclerAdapter.OnClick,
         searchItem = menu.findItem(R.id.action_search)
         val drawable = searchItem.icon
         if (drawable != null) {
-            drawable.setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_IN)
+            drawable.setColorFilter(
+                ContextCompat.getColor(this, R.color.ColorPrimaryTextColor),
+                PorterDuff.Mode.SRC_IN
+            )
             searchItem.icon = drawable
         }
         val searchView: SearchView =

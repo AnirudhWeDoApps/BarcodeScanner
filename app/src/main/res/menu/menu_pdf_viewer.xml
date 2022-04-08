@@ -6,12 +6,14 @@
         android:id="@+id/download"
         android:icon="@drawable/ic_save"
         android:title="Download"
-        app:showAsAction="always" />
+        app:iconTint="@color/ColorPrimaryTextColor"
+        app:showAsAction="ifRoom|collapseActionView" />
 
     <item
         android:id="@+id/share"
         android:icon="@drawable/ic_share"
         android:title="Share"
-        app:showAsAction="always" />
+        app:iconTint="@color/ColorPrimaryTextColor"
+        app:showAsAction="ifRoom|collapseActionView" />
 
 </menu>

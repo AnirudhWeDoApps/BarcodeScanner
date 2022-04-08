@@ -156,7 +156,7 @@ class BarcodeViewModel(
                 barcodeEntryList.count!!,
                 barcodeEntryList.minQuantity!!,
                 barcodeEntryList.sellingPrice!!,
-                false
+                true
             )
             barcodeDataMutableLiveData.postValue(barcodeEntryList)
         }
@@ -195,7 +195,6 @@ class BarcodeViewModel(
         itemList = repository.getAllItemsWithoutObservers().toMutableList()
         val foundItem = itemList.find { fItem -> fItem.barcodeNumber.equals(barcodeNumber) }
         var isUpdated = 0       // 0 == NotUpdated,  1 == Updated
-        if (showDialog == true) {
             if (foundItem != null) {
                 val totalPrice = foundItem.price?.plus(price)
                 val totalCount = foundItem.count?.plus(1)
@@ -226,7 +225,6 @@ class BarcodeViewModel(
                 )
                 scannedDataInsertAndUpdateResponseLiveData.postValue("$item Added")
             }
-        }
     }
 
     fun addUser(

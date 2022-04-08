@@ -4,7 +4,7 @@
     android:id="@+id/customToolbar"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/purple_500">
+    android:background="@color/colorPrimary">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -20,7 +20,7 @@
             app:layout_constraintBottom_toBottomOf="@id/tv_title"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@id/tv_title"
-            app:tint="@color/white" />
+            app:tint="@color/ColorPrimaryTextColor" />
 
         <TextView
             android:id="@+id/tv_title"
@@ -29,7 +29,7 @@
             android:layout_marginStart="5dp"
             android:gravity="center"
             android:text="@string/app_name"
-            android:textColor="@color/white"
+            android:textColor="@color/ColorPrimaryTextColor"
             android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@id/iv_back"
@@ -46,7 +46,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:tint="@color/white" />
+            app:tint="@color/ColorPrimaryTextColor" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.appcompat.widget.Toolbar>

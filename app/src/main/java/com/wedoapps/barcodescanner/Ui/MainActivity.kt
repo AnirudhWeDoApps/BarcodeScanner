@@ -1,19 +1,14 @@
 package com.wedoapps.barcodescanner.Ui
 
-import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.core.widget.NestedScrollView
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.zxing.BarcodeFormat
@@ -258,7 +253,6 @@ class MainActivity : AppCompatActivity(), MainDataRecyclerAdapter.OnClick,
             beepManager?.playBeepSoundAndVibrate()
         }
     }
-
 
 
     override fun onSheetClose(inserted: Boolean) {

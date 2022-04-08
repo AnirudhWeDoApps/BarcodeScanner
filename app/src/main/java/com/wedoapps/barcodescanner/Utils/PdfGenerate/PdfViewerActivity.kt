@@ -42,7 +42,7 @@ class PdfViewerActivity : PDFViewerActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.title = "Pdf Viewer"
         supportActionBar?.setBackgroundDrawable(
-            ColorDrawable(resources.getColor(android.R.color.darker_gray))
+            ColorDrawable(resources.getColor(R.color.colorPrimary))
         )
 
         createInvoiceActivityResultLauncher = registerForActivityResult(
