@@ -2,6 +2,7 @@ package com.wedoapps.barcodescanner.Repository
 
 import com.wedoapps.barcodescanner.Db.BarcodeDatabase
 import com.wedoapps.barcodescanner.Model.BarcodeEntryItem
+import com.wedoapps.barcodescanner.Model.PDFData
 import com.wedoapps.barcodescanner.Model.ScannedData
 import com.wedoapps.barcodescanner.Model.Users
 
@@ -44,4 +45,12 @@ class BarcodeRepository(private val db: BarcodeDatabase) {
     fun getAllUserList() = db.getBarcodeDao().getAllUserList()
 
     suspend fun deleteScannedData() = db.getBarcodeDao().deleteScannedData()
+
+    suspend fun addHistoryItem(pdfData: PDFData) = db.getBarcodeDao().addHistoryItem(pdfData)
+
+    suspend fun deleteHistoryItem(pdfData: PDFData) = db.getBarcodeDao().deleteHistoryItem(pdfData)
+
+    fun getAllHistoryList() = db.getBarcodeDao().getAllHistoryList()
+
+    suspend fun getHistoryDate(toDate: String, fromDate: String) = db.getBarcodeDao().getHistoryFromDate(toDate, fromDate)
 }

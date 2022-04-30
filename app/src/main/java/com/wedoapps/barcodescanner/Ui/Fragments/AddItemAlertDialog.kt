@@ -85,7 +85,7 @@ class AddItemAlertDialog : DialogFragment() {
                                 .toInt(),
                             binding.inputQuantity.editText?.text.toString().toInt(),
                         )
-//                        updateScannedData(false)
+                        updateScannedData(false)
                         dismiss()
                         listener.onSheetClose(false)
                     } else {
@@ -99,7 +99,7 @@ class AddItemAlertDialog : DialogFragment() {
                             count = binding.inputQuantity.editText?.text.toString().toInt(),
                             minCount = emptyMin()
                         )
-//                        updateScannedData(false)
+                        updateScannedData(false)
                         dismiss()
                         listener.onSheetClose(false)
                     }
@@ -124,11 +124,11 @@ class AddItemAlertDialog : DialogFragment() {
         val price = binding.inputPrice.editText
         val sellingPrice = binding.inputSellingPrice.editText
         val quantity = binding.inputQuantity.editText
-        // Barcode
+     /*   // Barcode
         if (barcodeNumber?.text.toString().isEmpty()) {
             barcodeNumber?.error = "Field Cannot be Empty"
             return false
-        }
+        }*/
 
         // ItemCode
         if (barcodeCode?.text.toString().isEmpty()) {

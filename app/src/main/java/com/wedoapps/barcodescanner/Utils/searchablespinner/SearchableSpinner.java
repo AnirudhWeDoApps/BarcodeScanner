@@ -62,7 +62,7 @@ import io.codetail.animation.ViewAnimationUtils;
 import io.codetail.widget.RevealFrameLayout;
 import io.codetail.widget.RevealLinearLayout;
 
-public class SearchableSpinner extends RelativeLayout implements View.OnClickListener {
+public class SearchableSpinner extends RelativeLayout implements View.OnClickListener, AdapterView.OnItemSelectedListener {
 
     private static final int DefaultElevation = 16;
     private static final int DefaultAnimationDuration = 300;
@@ -161,14 +161,11 @@ public class SearchableSpinner extends RelativeLayout implements View.OnClickLis
             hideEdit();
         }
     };
-    private OnClickListener mOnRevelViewClickListener = new OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            if (mViewState == ViewState.ShowingRevealedLayout) {
-                getRootView().post(() -> revealEditView());
-            } else if (mViewState == ViewState.ShowingEditLayout) {
-                hideEditView();
-            }
+    private OnClickListener mOnRevelViewClickListener = v -> {
+        if (mViewState == ViewState.ShowingRevealedLayout) {
+            getRootView().post(() -> revealEditView());
+        } else if (mViewState == ViewState.ShowingEditLayout) {
+            hideEditView();
         }
     };
     private TextWatcher mTextWatcher = new TextWatcher() {
@@ -228,17 +225,17 @@ public class SearchableSpinner extends RelativeLayout implements View.OnClickLis
         if (attrs != null) {
             try {
                 TypedArray attributes = mContext.getTheme().obtainStyledAttributes(attrs, R.styleable.SearchableSpinner, defStyleAttr, defStyleRes);
-                mRevealViewBackgroundColor = attributes.getColor(R.styleable.SearchableSpinner_reveal_view_background_color, Color.WHITE);
-                mStartEditTintColor = attributes.getColor(R.styleable.SearchableSpinner_start_search_tint_color, Color.GRAY);
-                mEditViewBackgroundColor = attributes.getColor(R.styleable.SearchableSpinner_search_view_background_color, Color.TRANSPARENT);
-                mEditViewTextColor = attributes.getColor(R.styleable.SearchableSpinner_search_view_text_color, mContext.getResources().getColor(R.color.purple_500));
-                //mEditViewTextColor = attributes.getColor(R.styleable.SearchableSpinner_search_view_text_color, Color.BLACK);
-                mDoneEditTintColor = attributes.getColor(R.styleable.SearchableSpinner_done_search_tint_color, mContext.getResources().getColor(R.color.purple_500));
-                //mDoneEditTintColor = attributes.getColor(R.styleable.SearchableSpinner_done_search_tint_color, Color.GRAY);
+                mRevealViewBackgroundColor = attributes.getColor(R.styleable.SearchableSpinner_reveal_view_background_color, ContextCompat.getColor(mContext, R.color.gd_start));
+                mStartEditTintColor = attributes.getColor(R.styleable.SearchableSpinner_start_search_tint_color, ContextCompat.getColor(mContext, R.color.white));
+                mEditViewBackgroundColor = attributes.getColor(R.styleable.SearchableSpinner_search_view_background_color, ContextCompat.getColor(mContext, R.color.gd_start));
+                mEditViewTextColor = attributes.getColor(R.styleable.SearchableSpinner_search_view_text_color, ContextCompat.getColor(mContext, R.color.white));
+                mEditViewTextColor = attributes.getColor(R.styleable.SearchableSpinner_search_view_text_color, ContextCompat.getColor(mContext, R.color.white));
+                mDoneEditTintColor = attributes.getColor(R.styleable.SearchableSpinner_done_search_tint_color, ContextCompat.getColor(mContext, R.color.white));
+                mDoneEditTintColor = attributes.getColor(R.styleable.SearchableSpinner_done_search_tint_color, ContextCompat.getColor(mContext, R.color.white));
                 mBordersSize = attributes.getDimensionPixelSize(R.styleable.SearchableSpinner_borders_size, 4);
                 mExpandSize = attributes.getDimensionPixelSize(R.styleable.SearchableSpinner_spinner_expand_height, 0);
                 mShowBorders = attributes.getBoolean(R.styleable.SearchableSpinner_show_borders, false);
-                mBoarderColor = attributes.getColor(R.styleable.SearchableSpinner_boarder_color, mContext.getResources().getColor(android.R.color.transparent));
+                mBoarderColor = attributes.getColor(R.styleable.SearchableSpinner_boarder_color, ContextCompat.getColor(mContext, R.color.gd_start));
                 // mBoarderColor = attributes.getColor(R.styleable.SearchableSpinner_boarder_color, Color.GRAY);
                 mAnimDuration = attributes.getColor(R.styleable.SearchableSpinner_anim_duration, DefaultAnimationDuration);
                 mKeepLastSearch = attributes.getBoolean(R.styleable.SearchableSpinner_keep_last_search, false);
@@ -249,7 +246,7 @@ public class SearchableSpinner extends RelativeLayout implements View.OnClickLis
                 mListDividerSize = attributes.getDimensionPixelSize(R.styleable.SearchableSpinner_divider_height, 0);
                 mFontName = attributes.getString(R.styleable.SearchableSpinner_font_name);
                 isSearchable = attributes.getBoolean(R.styleable.SearchableSpinner_searchable, true);
-                spinnerBorderColor = attributes.getColor(R.styleable.SearchableSpinner_spinner_border_color, Color.TRANSPARENT);
+                spinnerBorderColor = attributes.getColor(R.styleable.SearchableSpinner_spinner_border_color, ContextCompat.getColor(mContext, R.color.gd_start));
             } catch (UnsupportedOperationException e) {
                 Log.e("SearchableSpinner", "getAttributeSet --> " + e.getLocalizedMessage());
             }
@@ -316,25 +313,25 @@ public class SearchableSpinner extends RelativeLayout implements View.OnClickLis
         mPopupWindow.setContentView(mSpinnerListContainer);
         mPopupWindow.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         mPopupWindow.setInputMethodMode(PopupWindow.INPUT_METHOD_NEEDED);
-        mPopupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
-            @Override
-            public void onDismiss() {
-                hideEdit();
-            }
-        });
+        mPopupWindow.setOnDismissListener(this::hideEdit);
         mPopupWindow.setFocusable(false);
         if (UITools.isLollipopOrHigher()) {
             mPopupWindow.setElevation(DefaultElevation);
         }
         mPopupWindow.setBackgroundDrawable(ContextCompat.getDrawable(mContext, R.drawable.spinner_drawable));
 
+        mSpinnerListView.setOnItemSelectedListener(this);
+
         mSpinnerListView.setOnItemClickListener(mOnItemSelectedListener);
         if (mCurrSelectedView == null) {
             if (!TextUtils.isEmpty(mSearchHintText)) {
                 mSearchEditText.setHint(mSearchHintText);
+                mSearchEditText.setHintTextColor(Color.WHITE);
+                mSearchEditText.setTextColor(Color.WHITE);
             }
             if (!TextUtils.isEmpty(mNoItemsFoundText)) {
                 mEmptyTextView.setText(mNoItemsFoundText);
+                mEmptyTextView.setTextColor(Color.WHITE);
             }
             if (mCurrSelectedView == null && !TextUtils.isEmpty(mRevealEmptyText)) {
                 revealEmptyText = new TextView(mContext);
@@ -379,7 +376,7 @@ public class SearchableSpinner extends RelativeLayout implements View.OnClickLis
         } else {
             revealEmptyText = new TextView(mContext);
             revealEmptyText.setText(mRevealEmptyText);
-            revealEmptyText.setTextColor(mContext.getResources().getColor(R.color.cardview_dark_background));
+            revealEmptyText.setTextColor(Color.WHITE);
             //float density = mContext.getResources().getDisplayMetrics().density;
             //int paddingPixel = (int) (PADDING_DP * density);
             revealEmptyText.setPadding(0, 0, 0, 0);
@@ -535,34 +532,31 @@ public class SearchableSpinner extends RelativeLayout implements View.OnClickLis
         if (!mPopupWindow.isShowing()) {
             mPopupWindow.showAsDropDown(this, cx, 0);
         }
-        mPopupWindow.getContentView().post(new Runnable() {
-            @Override
-            public void run() {
-                Animator revealAnimator = ViewAnimationUtils.createCircularReveal(mPopupWindow.getContentView().findViewById(R.id.search_list_layout), cxr, cy, reverseEndRadius, reverseStartRadius);
-                revealAnimator.addListener(new Animator.AnimatorListener() {
-                    @Override
-                    public void onAnimationStart(Animator animation) {
-                    }
+        mPopupWindow.getContentView().post(() -> {
+            Animator revealAnimator = ViewAnimationUtils.createCircularReveal(mPopupWindow.getContentView().findViewById(R.id.search_list_layout), cxr, cy, reverseEndRadius, reverseStartRadius);
+            revealAnimator.addListener(new Animator.AnimatorListener() {
+                @Override
+                public void onAnimationStart(Animator animation) {
+                }
 
-                    @Override
-                    public void onAnimationEnd(Animator animation) {
-                        mViewState = ViewState.ShowingEditLayout;
-                        mRevealContainerCardView.setVisibility(View.INVISIBLE);
-                    }
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    mViewState = ViewState.ShowingEditLayout;
+                    mRevealContainerCardView.setVisibility(View.INVISIBLE);
+                }
 
-                    @Override
-                    public void onAnimationCancel(Animator animation) {
+                @Override
+                public void onAnimationCancel(Animator animation) {
 
-                    }
+                }
 
-                    @Override
-                    public void onAnimationRepeat(Animator animation) {
+                @Override
+                public void onAnimationRepeat(Animator animation) {
 
-                    }
-                });
-                revealAnimator.setDuration(mAnimDuration);
-                revealAnimator.start();
-            }
+                }
+            });
+            revealAnimator.setDuration(mAnimDuration);
+            revealAnimator.start();
         });
 
         final Animator animator = ViewAnimationUtils.createCircularReveal(mContainerCardView, cxr, cy, reverseEndRadius, reverseStartRadius);
@@ -845,6 +839,17 @@ public class SearchableSpinner extends RelativeLayout implements View.OnClickLis
             createTypeface();
         }
         super.onRestoreInstanceState(ss.getSuperState());
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+        TextView selected = (TextView) view;
+        selected.setTextColor(Color.WHITE);
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {
+
     }
 
     public enum ViewState {

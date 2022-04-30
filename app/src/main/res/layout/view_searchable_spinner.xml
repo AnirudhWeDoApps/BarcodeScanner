@@ -72,7 +72,8 @@
                             android:shadowDx="3"
                             android:shadowDy="3"
                             android:shadowRadius="1"
-                            android:src="@drawable/ic_arrow_down" />
+                            android:src="@drawable/ic_arrow_down"
+                            app:tint="@color/white" />
                     </FrameLayout>
                 </LinearLayout>
             </RelativeLayout>
@@ -109,7 +110,8 @@
                     android:paddingStart="5dp"
                     android:paddingEnd="5dp"
                     android:singleLine="true"
-                    android:textColor="@color/cardview_dark_background" />
+                    android:textColor="@color/white"
+                    android:textColorHint="@color/white" />
 
                 <FrameLayout
                     android:layout_width="@dimen/_40sdp"
@@ -128,10 +130,11 @@
                         android:contentDescription="@string/start_search"
                         android:focusable="true"
                         android:gravity="center"
-                        android:shadowColor="#22000000"
+                        android:shadowColor="@color/white"
                         android:shadowDx="3"
                         android:shadowDy="3"
                         android:shadowRadius="1"
+                        app:tint="@color/white"
                         android:src="@drawable/ic_arrow_up" />
 
                 </FrameLayout>

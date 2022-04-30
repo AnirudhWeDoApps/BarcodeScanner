@@ -1,15 +1,17 @@
-package com.wedoapps.barcodescanner.Ui
+package com.wedoapps.barcodescanner.Ui.Search
 
 import android.content.Intent
-import android.graphics.PorterDuff
+import android.graphics.Color
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
@@ -18,6 +20,7 @@ import com.wedoapps.barcodescanner.BarcodeViewModel
 import com.wedoapps.barcodescanner.Model.BarcodeEntryItem
 import com.wedoapps.barcodescanner.R
 import com.wedoapps.barcodescanner.Ui.Fragments.AddItemAlertDialog
+import com.wedoapps.barcodescanner.Ui.Scanner.MainActivity
 import com.wedoapps.barcodescanner.Utils.BarcodeApplication
 import com.wedoapps.barcodescanner.Utils.Constants
 import com.wedoapps.barcodescanner.Utils.ViewModelProviderFactory
@@ -70,25 +73,24 @@ class SearchActivity : AppCompatActivity(), BarcodeDataRecyclerAdapter.OnClick,
             }
         }
 
+
         binding.rvSearch.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                if (dy > 0 || dy < 0 && binding.fabAddStock.isShown) {
-                    binding.fabAddStock.hide()
+                if (dy > 0 || dy < 0 && binding.fabAdd.isShown) {
+                    binding.fabAdd.visibility = View.GONE
                 }
             }
 
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-                    binding.fabAddStock.show()
+                    binding.fabAdd.visibility = View.VISIBLE
                 }
                 super.onScrollStateChanged(recyclerView, newState)
             }
         })
 
-        binding.fabAddStock.setOnClickListener {
-            val addItemDialog = AddItemAlertDialog()
-            addItemDialog.show(supportFragmentManager, addItemDialog.tag)
-        }
+        animateFab()
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -96,16 +98,25 @@ class SearchActivity : AppCompatActivity(), BarcodeDataRecyclerAdapter.OnClick,
         searchItem = menu.findItem(R.id.action_search)
         val drawable = searchItem.icon
         if (drawable != null) {
-            drawable.setColorFilter(
-                ContextCompat.getColor(this, R.color.ColorPrimaryTextColor),
-                PorterDuff.Mode.SRC_IN
-            )
+            drawable.setTint(ContextCompat.getColor(this, R.color.black))
             searchItem.icon = drawable
         }
         val searchView: SearchView =
             searchItem.actionView as SearchView
+        val searchIcon = searchView.findViewById<ImageView>(androidx.appcompat.R.id.search_button)
+        val cancelIcon =
+            searchView.findViewById<ImageView>(androidx.appcompat.R.id.search_close_btn)
+        val searchHint =
+            searchView.findViewById<SearchView.SearchAutoComplete>(androidx.appcompat.R.id.search_src_text)
+        searchHint.setHintTextColor(Color.BLACK)
+        searchHint.setTextColor(Color.BLACK)
+        searchIcon.setImageDrawable(AppCompatResources.getDrawable(this, R.drawable.ic_search))
+        cancelIcon.setImageDrawable(AppCompatResources.getDrawable(this, R.drawable.ic_close))
+
+        searchItem.expandActionView()
         searchView.isIconified = false
-        searchView.requestFocus()
+        searchView.isFocusable = true
+        searchView.requestFocusFromTouch()
         searchView.queryHint = "Search Item"
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
@@ -221,5 +232,18 @@ class SearchActivity : AppCompatActivity(), BarcodeDataRecyclerAdapter.OnClick,
         }
         val dialog = builder.create()
         dialog.show()
+    }
+
+    private fun animateFab() {
+        binding.apply {
+            fabManually.setOnClickListener {
+                val addItemDialog = AddItemAlertDialog()
+                addItemDialog.show(supportFragmentManager, addItemDialog.tag)
+            }
+
+            fabScanner.setOnClickListener {
+                startActivity(Intent(this@SearchActivity, MainActivity::class.java))
+            }
+        }
     }
 }

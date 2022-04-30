@@ -118,6 +118,7 @@ class AddUserFragment : BottomSheetDialogFragment() {
             }
 
             override fun afterTextChanged(p0: Editable?) {
+
             }
         })
 

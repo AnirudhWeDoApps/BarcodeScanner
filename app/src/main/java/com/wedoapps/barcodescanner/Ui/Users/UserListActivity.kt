@@ -1,4 +1,4 @@
-package com.wedoapps.barcodescanner.Ui
+package com.wedoapps.barcodescanner.Ui.Users
 
 import android.os.Bundle
 import android.view.View

@@ -6,9 +6,7 @@
     android:layout_height="wrap_content"
     android:layout_margin="10dp"
     android:orientation="vertical"
-    app:cardCornerRadius="10dp"
-    app:strokeColor="@color/black"
-    app:strokeWidth="@dimen/_1sdp">
+    app:cardCornerRadius="10dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -18,6 +16,7 @@
             android:id="@+id/co_inner"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="@drawable/gradient_bg"
             android:padding="10dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -27,9 +26,9 @@
                 android:id="@+id/tv_userName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textColor="@color/ColorSecondaryTextColor"
                 android:textSize="20sp"
                 android:textStyle="bold"
-                android:textColor="@color/ColorPrimaryTextColor"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="@string/app_name" />
@@ -38,8 +37,8 @@
                 android:id="@+id/tv_userMobile"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@color/ColorSecondaryTextColor"
                 android:textSize="15sp"
-                android:textColor="@color/ColorPrimaryTextColor"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tv_userName"
                 tools:text="itemCode" />
@@ -52,10 +51,10 @@
             android:layout_height="wrap_content"
             android:background="@android:color/holo_blue_light"
             android:text="Edit"
-            app:iconTint="@color/ColorPrimaryTextColor"
             android:textColor="@color/ColorPrimaryTextColor"
             app:icon="@drawable/ic_edit"
             app:iconGravity="textStart"
+            app:iconTint="@color/ColorPrimaryTextColor"
             app:layout_constraintEnd_toStartOf="@+id/deleteBtn"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/co_inner" />

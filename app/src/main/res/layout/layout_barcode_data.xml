@@ -5,8 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="10dp"
-    app:strokeColor="@color/black"
-    app:strokeWidth="@dimen/_1sdp"
     android:orientation="vertical"
     app:cardCornerRadius="10dp">
 
@@ -19,6 +17,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:padding="10dp"
+            android:background="@drawable/gradient_bg"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -29,7 +28,7 @@
                 android:layout_height="wrap_content"
                 android:textSize="20sp"
                 android:textStyle="bold"
-                android:textColor="@color/ColorPrimaryTextColor"
+                android:textColor="@color/ColorSecondaryTextColor"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="@string/app_name" />
@@ -39,7 +38,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="15sp"
-                android:textColor="@color/ColorPrimaryTextColor"
+                android:textColor="@color/ColorSecondaryTextColor"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tv_barcodeNumber"
                 tools:text="itemCode" />
@@ -51,7 +50,7 @@
                 android:layout_marginTop="10dp"
                 android:textSize="18sp"
                 android:textStyle="bold"
-                android:textColor="@color/ColorPrimaryTextColor"
+                android:textColor="@color/ColorSecondaryTextColor"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tv_itemCode"
                 tools:text="@string/app_name" />
@@ -63,7 +62,7 @@
                 android:text="Brought At:"
                 android:textSize="15sp"
                 android:textStyle="bold"
-                android:textColor="@color/ColorPrimaryTextColor"
+                android:textColor="@color/ColorSecondaryTextColor"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tv_itemName" />
 
@@ -73,7 +72,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
                 android:textSize="15sp"
-                android:textColor="@color/ColorPrimaryTextColor"
+                android:textColor="@color/ColorSecondaryTextColor"
                 android:textStyle="bold"
                 app:layout_constraintStart_toEndOf="@id/tv_purchase_title"
                 app:layout_constraintTop_toBottomOf="@id/tv_itemName"
@@ -88,7 +87,7 @@
                 android:layout_marginTop="10dp"
                 android:textSize="20sp"
                 android:textStyle="bold"
-                android:textColor="@color/ColorPrimaryTextColor"
+                android:textColor="@color/ColorSecondaryTextColor"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tv_purchase_title"
                 tools:text="@string/Rs" />
@@ -99,7 +98,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="5dp"
                 android:textSize="18sp"
-                android:textColor="@color/ColorPrimaryTextColor"
+                android:textColor="@color/ColorSecondaryTextColor"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toTopOf="@id/tv_min_quantity"
                 app:layout_constraintEnd_toEndOf="parent"

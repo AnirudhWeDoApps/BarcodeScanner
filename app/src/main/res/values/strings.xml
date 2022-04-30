@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Barcode Scanner</string>
+    <string name="app_name">Bill Book</string>
     <string name="Rs">\u20B9</string>
     <string name="permission_required">Permission are requried access the app.</string>
     <string name="ok">OK</string>
@@ -14,4 +14,19 @@
     <string name="md_expand_less">Less</string>
     <string name="select_user_name">Select User</string>
     <string name="add_party">Add User</string>
+    <string name="choice_image">Choice Image</string>
+    <string name="generate_bill">Generate Bill</string>
+    <string name="add_user_info">Add User Info</string>
+    <string name="add_update_stock">Add / Update Stock</string>
+    <string name="billing_history">Billing History</string>
+    <string name="to">To:</string>
+    <string name="choose_to_date">Choose To Date</string>
+    <string name="from">From:</string>
+    <string name="choose_from_date">Choose From Date</string>
+    <string name="share">Share</string>
+    <string name="no_data">No Data</string>
+    <string name="manual_entry">Manual Entry</string>
+    <string name="add_manually">Add Manually</string>
+    <string name="add_stocks">Add Stocks</string>
+    <string name="add_through_scanner">Add through Scanner</string>
 </resources>

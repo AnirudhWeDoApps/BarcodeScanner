@@ -1,14 +1,19 @@
-package com.wedoapps.barcodescanner.Ui
+package com.wedoapps.barcodescanner.Ui.Scanner
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.core.widget.NestedScrollView
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.zxing.BarcodeFormat
@@ -18,7 +23,9 @@ import com.wedoapps.barcodescanner.Adapter.MainDataRecyclerAdapter
 import com.wedoapps.barcodescanner.BarcodeViewModel
 import com.wedoapps.barcodescanner.Model.ScannedData
 import com.wedoapps.barcodescanner.R
+import com.wedoapps.barcodescanner.Ui.Cart.CartActivity
 import com.wedoapps.barcodescanner.Ui.Fragments.AddItemAlertDialog
+import com.wedoapps.barcodescanner.Ui.Search.SearchActivity
 import com.wedoapps.barcodescanner.Utils.BarcodeApplication
 import com.wedoapps.barcodescanner.Utils.Constants.BARCODE
 import com.wedoapps.barcodescanner.Utils.Constants.TAG
@@ -39,6 +46,13 @@ class MainActivity : AppCompatActivity(), MainDataRecyclerAdapter.OnClick,
             (application as BarcodeApplication).repository
         )
     }
+
+    //    private lateinit var searchItem: MenuItem
+    private val permission = listOf(
+        Manifest.permission.READ_EXTERNAL_STORAGE,
+        Manifest.permission.WRITE_EXTERNAL_STORAGE,
+        Manifest.permission.CAMERA
+    )
     private val quantityHashMap = hashMapOf<String, String>()
     private var scannedDataList = mutableListOf<ScannedData>()
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<NestedScrollView>
@@ -58,12 +72,23 @@ class MainActivity : AppCompatActivity(), MainDataRecyclerAdapter.OnClick,
         val toolbar = binding.toolbar.customToolbar
         setSupportActionBar(toolbar)
 
-        binding.toolbar.ivAddUsers.visibility = View.GONE
+        dataAdapter = MainDataRecyclerAdapter(listOf(), this)
+
+        checkPermission(100)
+
+//        binding.toolbar.toolbarTitle.gravity = Gravity.START
 
         binding.toolbar.ivBack.setOnClickListener {
-            startActivity(Intent(this, ChoiceActivity::class.java))
             finish()
         }
+
+        binding.toolbar.ivAddUsers.setOnClickListener {
+            startActivity(Intent(this, SearchActivity::class.java))
+
+        }
+
+
+
         beepManager = BeepManager(this)
 
         val viewIncluded = binding.includeContent
@@ -127,13 +152,60 @@ class MainActivity : AppCompatActivity(), MainDataRecyclerAdapter.OnClick,
         }
     }
 
+    /*override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.toolbar_menu, menu)
+        searchItem = menu.findItem(R.id.action_search)
+        val drawable = searchItem.icon
+        if (drawable != null) {
+            drawable.setColorFilter(
+                ContextCompat.getColor(this, R.color.ColorPrimaryTextColor),
+                PorterDuff.Mode.SRC_IN
+            )
+            searchItem.icon = drawable
+        }
+        val searchView: SearchView =
+            searchItem.actionView as SearchView
+        searchView.isIconified = false
+        searchView.requestFocus()
+        searchView.queryHint = "Search Item"
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String): Boolean {
+                if (!searchView.isIconified) {
+                    searchView.isIconified = true
+                }
+                searchItem.collapseActionView()
+                filter(query)
+                return false
+            }
+
+            override fun onQueryTextChange(s: String): Boolean {
+                filter(s)
+                return false
+            }
+        })
+        return true
+    }
+
+    private fun filter(text: String) {
+        val filteredList: ArrayList<ScannedData> = ArrayList()
+        for (item in scannedDataList) {
+            if (item.item?.lowercase(Locale.getDefault())!!
+                    .contains(text.lowercase(Locale.getDefault()))
+            ) {
+                filteredList.add(item)
+            }
+        }
+        dataAdapter.updateData(filteredList)
+    }*/
+
     private fun addData() {
         viewModel.getScannedDataList().observe(this) {
             scannedDataList = it as MutableList<ScannedData>
+            dataAdapter.updateData(it)
             binding.includeContent.recyclerView.apply {
                 setHasFixedSize(true)
                 isNestedScrollingEnabled = false
-                adapter = MainDataRecyclerAdapter(scannedDataList, this@MainActivity)
+                adapter = dataAdapter
             }
             Log.d(TAG, "addData: $it")
         }
@@ -285,4 +357,39 @@ class MainActivity : AppCompatActivity(), MainDataRecyclerAdapter.OnClick,
         val dialog = builder.create()
         dialog.show()
     }
+
+    private fun checkPermission(requestCode: Int) {
+        if (ContextCompat.checkSelfPermission(
+                this,
+                permission[0]
+            ) == PackageManager.PERMISSION_DENIED && ContextCompat.checkSelfPermission(
+                this,
+                permission[1]
+            ) == PackageManager.PERMISSION_DENIED && ContextCompat.checkSelfPermission(
+                this,
+                permission[2]
+            ) == PackageManager.PERMISSION_DENIED
+        ) {
+            // Requesting the permission
+            ActivityCompat.requestPermissions(
+                this,
+                permission.toTypedArray(), requestCode
+            )
+        } else {
+            requestPermissionLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
+            requestPermissionLauncher.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+            requestPermissionLauncher.launch(Manifest.permission.CAMERA)
+        }
+    }
+
+    private val requestPermissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { isGranted ->
+        if (isGranted) {
+            Log.i(TAG, "Permission: Granted")
+        } else {
+            Log.i(TAG, "Permission: Denied")
+        }
+    }
+
 }

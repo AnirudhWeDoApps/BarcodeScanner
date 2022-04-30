@@ -32,6 +32,7 @@
             android:layout_height="match_parent"
             android:background="@android:color/white"
             android:gravity="center"
-            android:text="@string/empty_list" />
+            android:text="@string/empty_list"
+            android:textColor="@color/white"/>
     </LinearLayout>
 </io.codetail.widget.RevealLinearLayout>

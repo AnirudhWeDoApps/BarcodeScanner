@@ -8,6 +8,6 @@
         android:title="Search"
         app:actionViewClass="androidx.appcompat.widget.SearchView"
         app:iconTint="@color/ColorPrimaryTextColor"
-        app:showAsAction="ifRoom|collapseActionView" />
+        app:showAsAction="always" />
 
 </menu>

@@ -11,6 +11,7 @@ import android.text.style.ForegroundColorSpan
 import android.view.Gravity
 import android.widget.LinearLayout
 import android.widget.Toast
+import androidx.activity.viewModels
 import com.tejpratapsingh.pdfcreator.activity.PDFCreatorActivity
 import com.tejpratapsingh.pdfcreator.activity.PDFViewerActivity
 import com.tejpratapsingh.pdfcreator.utils.PDFUtil
@@ -22,25 +23,41 @@ import com.tejpratapsingh.pdfcreator.views.PDFTableView.PDFTableRowView
 import com.tejpratapsingh.pdfcreator.views.basic.PDFHorizontalView
 import com.tejpratapsingh.pdfcreator.views.basic.PDFLineSeparatorView
 import com.tejpratapsingh.pdfcreator.views.basic.PDFTextView
+import com.wedoapps.barcodescanner.BarcodeViewModel
 import com.wedoapps.barcodescanner.Model.PDFData
+import com.wedoapps.barcodescanner.Model.ScannedData
 import com.wedoapps.barcodescanner.R
-import com.wedoapps.barcodescanner.Ui.MainActivity
+import com.wedoapps.barcodescanner.Ui.Scanner.MainActivity
+import com.wedoapps.barcodescanner.Utils.BarcodeApplication
+import com.wedoapps.barcodescanner.Utils.Constants.IS_NEW
 import com.wedoapps.barcodescanner.Utils.Constants.PDF_DATA
 import com.wedoapps.barcodescanner.Utils.Constants.REQUEST_CODE
+import com.wedoapps.barcodescanner.Utils.ViewModelProviderFactory
 import java.io.File
 import java.util.*
 
 class PDFActivity : PDFCreatorActivity() {
 
     private var pdfData: PDFData? = PDFData()
+    private val viewModel: BarcodeViewModel by viewModels {
+        ViewModelProviderFactory(
+            application,
+            (application as BarcodeApplication).repository
+        )
+    }
+    private var isNew = true
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         supportActionBar?.hide()
 
         pdfData = intent.getParcelableExtra(PDF_DATA)
+        isNew = intent.getBooleanExtra(IS_NEW, true)
 
-        createPDF(pdfData?.name + pdfData?.date, object : PDFUtil.PDFUtilListener {
+
+
+        createPDF(pdfData?.name + pdfData?.date + pdfData?.time, object : PDFUtil.PDFUtilListener {
             override fun pdfGenerationSuccess(savedPDFFile: File?) {
             }
 
@@ -108,7 +125,7 @@ class PDFActivity : PDFCreatorActivity() {
         pdfHorizontalView.addView(pdfCompanyNameView)
 
         val pdfDateAndTime = PDFTextView(applicationContext, PDFTextView.PDF_TEXT_SIZE.H3)
-        pdfDateAndTime.setText("Date: ${pdfData?.date}")
+        pdfDateAndTime.setText("Date: ${pdfData?.date} ${pdfData?.time}")
         pdfDateAndTime.view.gravity = Gravity.END
         pdfDateAndTime.setLayout(
             LinearLayout.LayoutParams(
@@ -172,7 +189,7 @@ class PDFActivity : PDFCreatorActivity() {
                         pdfTextView.setText(pdfData?.cartList!![s].item)
                     }
                     2 -> {
-                        pdfTextView.setText(pdfData?.cartList!![s].originalPrice.toString())
+                        pdfTextView.setText("${getString(R.string.Rs)}${pdfData?.cartList!![s].originalPrice.toString()}")
                         pdfTextView.view.gravity = Gravity.CENTER
                     }
                     3 -> {
@@ -180,7 +197,7 @@ class PDFActivity : PDFCreatorActivity() {
                         pdfTextView.view.gravity = Gravity.CENTER
                     }
                     4 -> {
-                        pdfTextView.setText(pdfData?.cartList!![s].price.toString())
+                        pdfTextView.setText("${getString(R.string.Rs)}${pdfData?.cartList!![s].price.toString()}")
                         pdfTextView.view.gravity = Gravity.END
                     }
                 }
@@ -253,12 +270,23 @@ class PDFActivity : PDFCreatorActivity() {
 
     override fun onNextClicked(savedPDFFile: File?) {
 
+        if (isNew) {
+            addInHistory(
+                pdfData?.name.toString(),
+                pdfData?.cartList,
+                pdfData?.phoneNumber.toString(),
+                pdfData?.total.toString(),
+                pdfData?.date.toString(),
+                pdfData?.time.toString()
+            )
+        }
         val pdfUri: Uri = Uri.fromFile(savedPDFFile)
 
         val intentPdfViewer = Intent(
             this,
             PdfViewerActivity::class.java
         )
+        intentPdfViewer.putExtra(PDF_DATA, pdfData)
         intentPdfViewer.putExtra(PDFViewerActivity.PDF_FILE_URI, pdfUri)
         startActivityForResult(intentPdfViewer, REQUEST_CODE)
     }
@@ -277,4 +305,18 @@ class PDFActivity : PDFCreatorActivity() {
             finish()
         }
     }
+
+    private fun addInHistory(
+        name: String,
+        itemList: ArrayList<ScannedData>?,
+        phoneNumber: String,
+        total: String,
+        date: String,
+        time: String
+    ) {
+        viewModel.addHistoryItem(
+            name, itemList, phoneNumber, total, date, time
+        )
+    }
+
 }

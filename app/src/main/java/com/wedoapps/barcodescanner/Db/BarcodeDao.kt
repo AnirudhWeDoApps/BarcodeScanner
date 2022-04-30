@@ -3,6 +3,7 @@ package com.wedoapps.barcodescanner.Db
 import androidx.lifecycle.LiveData
 import androidx.room.*
 import com.wedoapps.barcodescanner.Model.BarcodeEntryItem
+import com.wedoapps.barcodescanner.Model.PDFData
 import com.wedoapps.barcodescanner.Model.ScannedData
 import com.wedoapps.barcodescanner.Model.Users
 
@@ -57,4 +58,16 @@ interface BarcodeDao {
 
     @Query("DELETE FROM scanneddata")
     suspend fun deleteScannedData()
+
+    @Query("SELECT * FROM HistoryList")
+    fun getAllHistoryList(): LiveData<List<PDFData>>
+
+    @Query("SELECT * FROM HistoryList where date between :toDate and :fromDate")
+    suspend fun getHistoryFromDate(toDate: String, fromDate: String): List<PDFData>
+
+    @Delete
+    suspend fun deleteHistoryItem(pdfData: PDFData)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun addHistoryItem(pdfData: PDFData)
 }

@@ -17,24 +17,36 @@
         android:name=".Utils.BarcodeApplication"
         android:allowBackup="false"
         android:hardwareAccelerated="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/splash_title"
         android:label="@string/app_name"
         android:requestLegacyExternalStorage="true"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@drawable/splash_title"
         android:supportsRtl="true"
-        android:theme="@style/Theme.BarcodeScanner">
+        android:theme="@style/Theme.App.Starting">
         <activity
-            android:name=".Ui.MainActivity"
-            android:exported="false" />
-        <activity
-            android:name=".Ui.SearchActivity"
+            android:name=".Ui.History.SingleHistoryActivity"
             android:exported="false"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.BarcodeScanner"/>
+        <activity
+            android:name=".Ui.History.HistoryActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.BarcodeScanner" />
+        <activity
+            android:name=".Ui.Scanner.MainActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.BarcodeScanner" />
+        <activity
+            android:name=".Ui.Search.SearchActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.BarcodeScanner" />
         <activity
             android:name=".Utils.PdfGenerate.PDFActivity"
             android:configChanges="orientation|screenSize"
             android:theme="@style/AppTheme.TransparentStatusBar" />
-
         <activity
             android:name=".Utils.PdfGenerate.PdfViewerActivity"
             android:configChanges="orientation|screenSize"
@@ -51,17 +63,20 @@
         </provider>
 
         <activity
-            android:name=".Ui.CartActivity"
+            android:name=".Ui.Cart.CartActivity"
             android:exported="false"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.BarcodeScanner" />
         <activity
-            android:name=".Ui.UserListActivity"
+            android:name=".Ui.Users.UserListActivity"
             android:exported="false"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.BarcodeScanner" />
         <activity
-            android:name=".Ui.ChoiceActivity"
+            android:name=".Ui.Choice.ChoiceActivity"
             android:exported="true"
             android:screenOrientation="portrait"
+            android:theme="@style/Theme.App.Starting"
             tools:replace="screenOrientation">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

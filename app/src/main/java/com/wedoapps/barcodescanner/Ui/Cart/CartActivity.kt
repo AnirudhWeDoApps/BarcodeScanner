@@ -1,10 +1,12 @@
-package com.wedoapps.barcodescanner.Ui
+package com.wedoapps.barcodescanner.Ui.Cart
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import android.widget.ArrayAdapter
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -19,7 +21,9 @@ import com.wedoapps.barcodescanner.Model.ScannedData
 import com.wedoapps.barcodescanner.Model.Users
 import com.wedoapps.barcodescanner.R
 import com.wedoapps.barcodescanner.Ui.Fragments.AddUserFragment
+import com.wedoapps.barcodescanner.Ui.Scanner.MainActivity
 import com.wedoapps.barcodescanner.Utils.BarcodeApplication
+import com.wedoapps.barcodescanner.Utils.Constants.IS_NEW
 import com.wedoapps.barcodescanner.Utils.Constants.PDF_DATA
 import com.wedoapps.barcodescanner.Utils.PdfGenerate.PDFActivity
 import com.wedoapps.barcodescanner.Utils.SharedPreferenceManager
@@ -64,12 +68,15 @@ class CartActivity : AppCompatActivity(), DataRecyclerAdapter.OnClick, AddUserFr
 
         binding.toolbar.apply {
             ivBack.visibility = View.VISIBLE
+            ivAddUsers.visibility = View.GONE
         }
 
         binding.toolbar.ivBack.setOnClickListener {
             startActivity(Intent(this, MainActivity::class.java))
             finish()
         }
+
+        binding.toolbar.ivAddUsers.setImageResource(R.drawable.ic_user_add)
 
         binding.toolbar.ivAddUsers.setOnClickListener {
             openUserSheet()
@@ -214,6 +221,8 @@ class CartActivity : AppCompatActivity(), DataRecyclerAdapter.OnClick, AddUserFr
 
         binding.spinnerUsername.setOnItemSelectedListener(object : OnItemSelectedListener {
             override fun onItemSelected(view: View?, position: Int, id: Long) {
+                val tvview = view as TextView
+                tvview.setTextColor(Color.WHITE)
                 partyNameUpdate = if (position == -1) {
                     return
                 } else {
@@ -252,12 +261,14 @@ class CartActivity : AppCompatActivity(), DataRecyclerAdapter.OnClick, AddUserFr
 
         val foundItem = userList.find { user -> user.name == partyNameUpdate }
         val pdfData = PDFData(
+            null,
             partyNameUpdate,
             dataList as ArrayList<ScannedData>,
             foundItem?.mobileNo.toString(),
             total.toString()
         )
         val pdf = Intent(this, PDFActivity::class.java)
+        pdf.putExtra(IS_NEW, true)
         pdf.putExtra(PDF_DATA, pdfData)
         startActivity(pdf)
         finish()

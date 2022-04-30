@@ -11,5 +11,7 @@ object Constants {
     const val DOWNLOAD = 1
     const val SHARE = 0
     const val PDF_DATA = "PdfData"
+    const val IS_NEW = "isNew"
     const val REQUEST_CODE = 1
+    const val HISTORY_DATA = "HistoryData"
 }

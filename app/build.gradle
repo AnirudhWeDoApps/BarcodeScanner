@@ -9,7 +9,7 @@ android {
     compileSdk 31
 
     defaultConfig {
-        applicationId "com.wedoapps.barcodescanner"
+        applicationId "com.wedoapps.billbook"
         minSdk 24
         targetSdk 31
         versionCode 1
@@ -97,6 +97,15 @@ dependencies {
 
 //    implementation 'com.github.tejpratap46:PDFCreatorAndroid:3.0.2'
     implementation 'com.github.SmitCoderX:PDFCreatorAndroid:1.0.1'
+
+    // Splash Screen
+    implementation 'androidx.core:core-splashscreen:1.0.0-beta02'
+
+    // GSON
+    implementation 'com.google.code.gson:gson:2.9.0'
+
+    // FloatingButton
+    implementation 'com.getbase:floatingactionbutton:1.10.1'
 
 }
 

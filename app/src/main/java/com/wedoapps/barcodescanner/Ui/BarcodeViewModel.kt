@@ -3,13 +3,18 @@ package com.wedoapps.barcodescanner
 import android.app.Application
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.wedoapps.barcodescanner.Model.BarcodeEntryItem
+import com.wedoapps.barcodescanner.Model.PDFData
 import com.wedoapps.barcodescanner.Model.ScannedData
 import com.wedoapps.barcodescanner.Model.Users
 import com.wedoapps.barcodescanner.Repository.BarcodeRepository
 import com.wedoapps.barcodescanner.Utils.Constants.TAG
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class BarcodeViewModel(
@@ -17,9 +22,22 @@ class BarcodeViewModel(
     private val repository: BarcodeRepository
 ) : AndroidViewModel(app) {
 
+    private val _isLoading = MutableStateFlow(true)
+    val isLoading = _isLoading.asStateFlow()
+
+    init {
+        viewModelScope.launch {
+            delay(1500L)
+            _isLoading.value = false
+        }
+    }
+
+    private val _historyDataMutableLiveData = MutableLiveData<List<PDFData>>()
+    val historyDataLiveData: LiveData<List<PDFData>>
+        get() = _historyDataMutableLiveData
+
     val barcodeDataMutableLiveData = MutableLiveData<BarcodeEntryItem?>()
     val scannedDataInsertAndUpdateResponseLiveData = MutableLiveData<String>()
-
     private var itemList = mutableListOf<ScannedData>()
 
     private fun insertScannedItem(
@@ -195,36 +213,36 @@ class BarcodeViewModel(
         itemList = repository.getAllItemsWithoutObservers().toMutableList()
         val foundItem = itemList.find { fItem -> fItem.barcodeNumber.equals(barcodeNumber) }
         var isUpdated = 0       // 0 == NotUpdated,  1 == Updated
-            if (foundItem != null) {
-                val totalPrice = foundItem.price?.plus(price)
-                val totalCount = foundItem.count?.plus(1)
-                isUpdated = 1
-                updateScannedData(
-                    id = foundItem.id!!,
-                    barcodeNumber = barcodeNumber ?: foundItem.barcodeNumber.toString(),
-                    item = foundItem.item.toString(),
-                    price = if (showDialog == true) totalPrice else foundItem.price,
-                    originalPrice = originalPrice ?: foundItem.originalPrice,
-                    storeQuantity = storeQuantity ?: foundItem.storeQuantity,
-                    minCount = foundItem.minCount,
-                    showDialog = showDialog,
-                    count = if (showDialog == true) totalCount else foundItem.count
-                )
-                scannedDataInsertAndUpdateResponseLiveData.postValue("$item Updated")
-            }
+        if (foundItem != null) {
+            val totalPrice = foundItem.price?.plus(price)
+            val totalCount = foundItem.count?.plus(1)
+            isUpdated = 1
+            updateScannedData(
+                id = foundItem.id!!,
+                barcodeNumber = barcodeNumber ?: foundItem.barcodeNumber.toString(),
+                item = foundItem.item.toString(),
+                price = if (showDialog == true) totalPrice else foundItem.price,
+                originalPrice = originalPrice ?: foundItem.originalPrice,
+                storeQuantity = storeQuantity ?: foundItem.storeQuantity,
+                minCount = foundItem.minCount,
+                showDialog = showDialog,
+                count = if (showDialog == true) totalCount else foundItem.count
+            )
+            scannedDataInsertAndUpdateResponseLiveData.postValue("$item Updated")
+        }
 
-            if (isUpdated == 0) {
-                insertScannedItem(
-                    barcodeNumber.toString(),
-                    item,
-                    price,
-                    originalPrice = price,
-                    storeQuantity,
-                    showDialog,
-                    minCount
-                )
-                scannedDataInsertAndUpdateResponseLiveData.postValue("$item Added")
-            }
+        if (isUpdated == 0) {
+            insertScannedItem(
+                barcodeNumber.toString(),
+                item,
+                price,
+                originalPrice = price,
+                storeQuantity,
+                showDialog,
+                minCount
+            )
+            scannedDataInsertAndUpdateResponseLiveData.postValue("$item Added")
+        }
     }
 
     fun addUser(
@@ -347,4 +365,37 @@ class BarcodeViewModel(
             )
         }
     }
+
+    fun addHistoryItem(
+        name: String,
+        itemList: ArrayList<ScannedData>?,
+        phoneNumber: String,
+        total: String,
+        date: String,
+        time: String
+    ) = viewModelScope.launch {
+        val pdfData = PDFData(
+            null, name, itemList, phoneNumber, total, date, time
+        )
+        repository.addHistoryItem(pdfData)
+    }
+
+    fun deleteHistoryItem(pdfData: PDFData) = viewModelScope.launch {
+        repository.deleteHistoryItem(pdfData)
+    }
+
+    fun getHistoryList() = repository.getAllHistoryList()
+
+    fun historyDateWise(toDate: String, fromDate: String) = viewModelScope.launch {
+        handleHistoryDateWise(toDate, fromDate)
+    }
+
+    private suspend fun handleHistoryDateWise(toDate: String, fromDate: String) {
+        Log.d(TAG, "view: $toDate $fromDate")
+        val list = repository.getHistoryDate(toDate, fromDate)
+        Log.d(TAG, "view LIST: $list")
+        _historyDataMutableLiveData.postValue(list)
+    }
+
+
 }

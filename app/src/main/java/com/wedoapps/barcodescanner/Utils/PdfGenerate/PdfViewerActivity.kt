@@ -15,11 +15,14 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
+import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import com.tejpratapsingh.pdfcreator.activity.PDFViewerActivity
 import com.wedoapps.barcodescanner.BarcodeViewModel
+import com.wedoapps.barcodescanner.Model.PDFData
 import com.wedoapps.barcodescanner.R
 import com.wedoapps.barcodescanner.Utils.BarcodeApplication
+import com.wedoapps.barcodescanner.Utils.Constants
 import com.wedoapps.barcodescanner.Utils.Constants.REQUEST_CODE
 import com.wedoapps.barcodescanner.Utils.ViewModelProviderFactory
 import java.io.File
@@ -35,6 +38,7 @@ class PdfViewerActivity : PDFViewerActivity() {
             (application as BarcodeApplication).repository
         )
     }
+    private var pdfData: PDFData? = PDFData()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,8 +46,10 @@ class PdfViewerActivity : PDFViewerActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.title = "Pdf Viewer"
         supportActionBar?.setBackgroundDrawable(
-            ColorDrawable(resources.getColor(R.color.colorPrimary))
+            ColorDrawable(ContextCompat.getColor(this, R.color.colorPrimary))
         )
+
+        pdfData = intent.getParcelableExtra(Constants.PDF_DATA)
 
         createInvoiceActivityResultLauncher = registerForActivityResult(
             ActivityResultContracts.StartActivityForResult()
@@ -73,7 +79,8 @@ class PdfViewerActivity : PDFViewerActivity() {
                 finish()
             }
             R.id.download -> {
-                createFile(pdfFile.name)
+                val fileName = "${pdfData?.name}-${pdfData?.date}-${pdfData?.time}"
+                createFile(fileName)
 
             }
             R.id.share -> {
@@ -145,6 +152,5 @@ class PdfViewerActivity : PDFViewerActivity() {
         setResult(REQUEST_CODE, intent)
         finish()
     }
-
 }
 
