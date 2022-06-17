@@ -20,6 +20,21 @@ data class PDFData(
     var date: String = getDate(),
     var time: String = getTime()
 ) : Parcelable {
+
+    constructor(
+        id: Int?,
+        name: String?,
+        cartList: ArrayList<ScannedData>?,
+        phoneNumber: String?,
+        total: String?
+    ) : this() {
+        this.id = id
+        this.name = name
+        this.cartList = cartList
+        this.phoneNumber = phoneNumber
+        this.total = total
+    }
+
     companion object {
         @SuppressLint("SimpleDateFormat")
         private fun getDate(): String {
@@ -34,6 +49,5 @@ data class PDFData(
             val currentTime = SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(Date())
             return currentTime.format(time)
         }
-
     }
 }

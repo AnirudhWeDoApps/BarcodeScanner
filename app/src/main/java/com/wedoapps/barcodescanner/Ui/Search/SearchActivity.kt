@@ -78,6 +78,7 @@ class SearchActivity : AppCompatActivity(), BarcodeDataRecyclerAdapter.OnClick,
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 if (dy > 0 || dy < 0 && binding.fabAdd.isShown) {
                     binding.fabAdd.visibility = View.GONE
+                    binding.fabAdd.visibility = View.GONE
                 }
             }
 
@@ -88,9 +89,7 @@ class SearchActivity : AppCompatActivity(), BarcodeDataRecyclerAdapter.OnClick,
                 super.onScrollStateChanged(recyclerView, newState)
             }
         })
-
-        animateFab()
-
+        onClickForFabs()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -188,6 +187,7 @@ class SearchActivity : AppCompatActivity(), BarcodeDataRecyclerAdapter.OnClick,
         } else {
             viewModel.insertAndUpdateScannedData(
                 data.barcodeNumber.toString(),
+                data.itemCode.toString(),
                 data.itemName.toString(),
                 data.sellingPrice!!,
                 data.count!!,
@@ -234,15 +234,17 @@ class SearchActivity : AppCompatActivity(), BarcodeDataRecyclerAdapter.OnClick,
         dialog.show()
     }
 
-    private fun animateFab() {
+    private fun onClickForFabs() {
         binding.apply {
             fabManually.setOnClickListener {
                 val addItemDialog = AddItemAlertDialog()
                 addItemDialog.show(supportFragmentManager, addItemDialog.tag)
+                fabAdd.collapse()
             }
 
             fabScanner.setOnClickListener {
                 startActivity(Intent(this@SearchActivity, MainActivity::class.java))
+                fabAdd.collapse()
             }
         }
     }

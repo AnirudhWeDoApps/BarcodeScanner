@@ -14,7 +14,7 @@ import com.wedoapps.barcodescanner.R
 import com.wedoapps.barcodescanner.Utils.Constants.HISTORY_DATA
 import com.wedoapps.barcodescanner.Utils.Constants.IS_NEW
 import com.wedoapps.barcodescanner.Utils.Constants.PDF_DATA
-import com.wedoapps.barcodescanner.Utils.PdfGenerate.PDFActivity
+import com.wedoapps.barcodescanner.Ui.PdfGenerate.PDFActivity
 import com.wedoapps.barcodescanner.databinding.ActivitySingleHistoryBinding
 
 class SingleHistoryActivity : AppCompatActivity() {

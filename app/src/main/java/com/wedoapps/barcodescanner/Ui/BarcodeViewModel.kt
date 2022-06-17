@@ -6,10 +6,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.wedoapps.barcodescanner.Model.BarcodeEntryItem
-import com.wedoapps.barcodescanner.Model.PDFData
-import com.wedoapps.barcodescanner.Model.ScannedData
-import com.wedoapps.barcodescanner.Model.Users
+import com.wedoapps.barcodescanner.Model.*
 import com.wedoapps.barcodescanner.Repository.BarcodeRepository
 import com.wedoapps.barcodescanner.Utils.Constants.TAG
 import kotlinx.coroutines.delay
@@ -40,8 +37,17 @@ class BarcodeViewModel(
     val scannedDataInsertAndUpdateResponseLiveData = MutableLiveData<String>()
     private var itemList = mutableListOf<ScannedData>()
 
+    private val _singleReportItem = MutableLiveData<List<SingleReportModel>>()
+    val singleReportItemLiveData: LiveData<List<SingleReportModel>>
+        get() = _singleReportItem
+
+    private val _buyerReport = MutableLiveData<List<BuyerReportModal>>()
+    val buyerReportLiveData: LiveData<List<BuyerReportModal>>
+        get() = _buyerReport
+
     private fun insertScannedItem(
         barcodeNumber: String,
+        itemCode: String,
         item: String,
         price: Int,
         originalPrice: Int?,
@@ -52,6 +58,7 @@ class BarcodeViewModel(
         val scannedData = ScannedData(
             null,
             barcodeNumber,
+            itemCode,
             item,
             price,
             originalPrice,
@@ -66,6 +73,7 @@ class BarcodeViewModel(
     fun updateScannedData(
         id: Int,
         barcodeNumber: String,
+        itemCode: String,
         item: String,
         price: Int?,
         originalPrice: Int?,
@@ -77,6 +85,7 @@ class BarcodeViewModel(
         val scannedData = ScannedData(
             id,
             barcodeNumber,
+            itemCode,
             item,
             price,
             originalPrice,
@@ -169,6 +178,7 @@ class BarcodeViewModel(
         } else if (barcodeEntryList.barcodeNumber == barcodeNumber) {
             insertAndUpdateScannedData(
                 barcodeEntryList.barcodeNumber.toString(),
+                barcodeEntryList.itemCode.toString(),
                 barcodeEntryList.itemName.toString(),
                 barcodeEntryList.sellingPrice!!,
                 barcodeEntryList.count!!,
@@ -182,6 +192,7 @@ class BarcodeViewModel(
 
     fun insertAndUpdateScannedData(
         barcodeNumber: String,
+        itemCode: String,
         item: String,
         price: Int,
         storeQuantity: Int?,
@@ -192,6 +203,7 @@ class BarcodeViewModel(
         viewModelScope.launch {
             handleInsertAndUpdateScannedData(
                 barcodeNumber,
+                itemCode,
                 item,
                 price,
                 storeQuantity,
@@ -203,6 +215,7 @@ class BarcodeViewModel(
 
     private suspend fun handleInsertAndUpdateScannedData(
         barcodeNumber: String?,
+        itemCode: String?,
         item: String,
         price: Int,
         storeQuantity: Int?,
@@ -220,6 +233,7 @@ class BarcodeViewModel(
             updateScannedData(
                 id = foundItem.id!!,
                 barcodeNumber = barcodeNumber ?: foundItem.barcodeNumber.toString(),
+                itemCode = itemCode ?: foundItem.itemCode.toString(),
                 item = foundItem.item.toString(),
                 price = if (showDialog == true) totalPrice else foundItem.price,
                 originalPrice = originalPrice ?: foundItem.originalPrice,
@@ -234,6 +248,7 @@ class BarcodeViewModel(
         if (isUpdated == 0) {
             insertScannedItem(
                 barcodeNumber.toString(),
+                itemCode.toString(),
                 item,
                 price,
                 originalPrice = price,
@@ -315,6 +330,7 @@ class BarcodeViewModel(
                     )
                     insertAndUpdateScannedData(
                         findBarcodeData.barcodeNumber.toString(),
+                        findBarcodeData.itemCode.toString(),
                         findBarcodeData.itemName.toString(),
                         findBarcodeData.sellingPrice!!,
                         newQuantity,
@@ -333,17 +349,19 @@ class BarcodeViewModel(
 
     fun updateScannedItem(
         barcodeNumber: String,
+        itemCode: String,
         item: String,
         originalPrice: Int?,
         storeQuantity: Int?,
     ) = viewModelScope.launch {
         handleUpdate(
-            barcodeNumber, item, originalPrice, storeQuantity
+            barcodeNumber, itemCode, item, originalPrice, storeQuantity
         )
     }
 
     private suspend fun handleUpdate(
         barcodeNumber: String,
+        itemCode: String,
         item: String,
         originalPrice: Int?,
         storeQuantity: Int?,
@@ -355,6 +373,7 @@ class BarcodeViewModel(
             updateScannedData(
                 foundItem.id!!,
                 barcodeNumber,
+                itemCode,
                 item,
                 foundItem.price,
                 originalPrice,
@@ -380,11 +399,11 @@ class BarcodeViewModel(
         repository.addHistoryItem(pdfData)
     }
 
-    fun deleteHistoryItem(pdfData: PDFData) = viewModelScope.launch {
-        repository.deleteHistoryItem(pdfData)
-    }
+    /* fun deleteHistoryItem(pdfData: PDFData) = viewModelScope.launch {
+         repository.deleteHistoryItem(pdfData)
+     }
 
-    fun getHistoryList() = repository.getAllHistoryList()
+     fun getHistoryList() = repository.getAllHistoryList()*/
 
     fun historyDateWise(toDate: String, fromDate: String) = viewModelScope.launch {
         handleHistoryDateWise(toDate, fromDate)
@@ -397,5 +416,327 @@ class BarcodeViewModel(
         _historyDataMutableLiveData.postValue(list)
     }
 
+    fun addVendor(
+        name: String,
+        email: String,
+        phoneNumber: String,
+        address: String,
+        city: String,
+        pincode: String,
+        payment: Int?,
+        paidPayment: Int?,
+        duePayment: Int?
+    ) = viewModelScope.launch {
+        val vendor = VendorModel(
+            null,
+            name = name,
+            email = email,
+            phoneNumber = phoneNumber,
+            address = address,
+            city = city,
+            pincode = pincode,
+            payment = payment,
+            paidPayment = paidPayment,
+            duePayment = duePayment
+        )
+        repository.addVendorItem(vendor)
+    }
 
+    fun updateVendor(
+        id: Int,
+        name: String,
+        email: String,
+        phoneNumber: String,
+        address: String,
+        city: String,
+        pincode: String,
+        payment: Int,
+        paidPayment: Int,
+        duePayment: Int
+    ) = viewModelScope.launch {
+        val vendor = VendorModel(
+            id = id,
+            name = name,
+            email = email,
+            phoneNumber = phoneNumber,
+            address = address,
+            city = city,
+            pincode = pincode,
+            payment = payment,
+            paidPayment = paidPayment,
+            duePayment = duePayment
+        )
+        repository.updateVendorItem(vendor)
+    }
+
+    fun deleteVendor(vendorModel: VendorModel) = viewModelScope.launch {
+        repository.deleteVendorItem(vendorModel)
+    }
+
+    fun vendorList() = repository.getAllVendorList()
+
+    fun updatePayment(
+        id: Int,
+        totalPayment: Int,
+        paidPayment: Int
+    ) = viewModelScope.launch {
+        safeHandleUpdatePayment(id, totalPayment, paidPayment)
+    }
+
+    private suspend fun safeHandleUpdatePayment(
+        id: Int,
+        totalPayment: Int,
+        paidPayment: Int
+    ) {
+        val foundVendor = repository.getVendorById(id).find { it.id == id }
+
+        val paid = foundVendor?.paidPayment?.plus(paidPayment)
+        val due = foundVendor?.duePayment?.minus(paidPayment)
+
+        val updateVendorModel = VendorModel(
+            id,
+            foundVendor?.name,
+            foundVendor?.email,
+            foundVendor?.phoneNumber,
+            foundVendor?.address,
+            foundVendor?.city,
+            foundVendor?.pincode,
+            totalPayment,
+            paid,
+            due
+        )
+        repository.updateVendorItem(updateVendorModel)
+    }
+
+    private fun insertSingleReport(
+        barcodeNumber: String,
+        itemCode: String,
+        itemName: String,
+        itemPrice: Int,
+        quantity: Int,
+        totalPrice: Int
+    ) = viewModelScope.launch {
+        handleInsertSingleReport(
+            barcodeNumber = barcodeNumber,
+            itemCode = itemCode,
+            itemName = itemName,
+            itemPrice = itemPrice,
+            quantity = quantity,
+            totalPrice = totalPrice
+        )
+    }
+
+    private suspend fun handleInsertSingleReport(
+        barcodeNumber: String,
+        itemCode: String,
+        itemName: String,
+        itemPrice: Int,
+        quantity: Int,
+        totalPrice: Int
+    ) {
+        val singleReportModel = SingleReportModel(
+            null,
+            barcodeNumber = barcodeNumber,
+            itemCode = itemCode,
+            itemName = itemName,
+            itemPrice = itemPrice,
+            quantity = quantity,
+            totalPrice = totalPrice
+        )
+
+        repository.insertSingleReport(singleReportModel)
+    }
+
+    private fun updateSingleReport(
+        id: Int,
+        barcodeNumber: String,
+        itemCode: String,
+        itemName: String,
+        itemPrice: Int,
+        quantity: Int,
+        totalPrice: Int
+    ) = viewModelScope.launch {
+        val singleReportModel = SingleReportModel(
+            id,
+            barcodeNumber = barcodeNumber,
+            itemCode = itemCode,
+            itemName = itemName,
+            itemPrice = itemPrice,
+            quantity = quantity,
+            totalPrice = totalPrice
+        )
+        repository.updateSingleReport(singleReportModel)
+    }
+
+    /* fun deleteSingleReport(reportModel: SingleReportModel) = viewModelScope.launch {
+         repository.deleteSingleReport(reportModel)
+     }*/
+
+    fun singleReportItem(fromDate: String, toDate: String) = viewModelScope.launch {
+        safeHandleSingleReportItem(fromDate, toDate)
+    }
+
+    fun updateAndInsertSingleReport(
+        barcodeNumber: String,
+        itemCode: String,
+        itemName: String,
+        itemPrice: Int,
+        quantity: Int,
+        totalPrice: Int
+    ) = viewModelScope.launch {
+        handleUpdateAndInsertSingleReport(
+            barcodeNumber,
+            itemCode,
+            itemName,
+            itemPrice,
+            quantity,
+            totalPrice
+        )
+    }
+
+    private suspend fun handleUpdateAndInsertSingleReport(
+        barcodeNumber: String,
+        itemCode: String,
+        itemName: String,
+        itemPrice: Int,
+        quantity: Int,
+        totalPrice: Int
+    ) {
+        val itemList = repository.getAllSingleReport()
+        val foundItem = itemList.find { it.barcodeNumber.equals(barcodeNumber) }
+        var isUpdated = 0       // 0 == NotUpdated,  1 == Updated
+        if (foundItem != null) {
+            val totalPriceAll = foundItem.itemPrice?.plus(itemPrice)
+            val totalCount = foundItem.quantity?.plus(quantity)
+            isUpdated = 1
+            updateSingleReport(
+                id = foundItem.id!!,
+                barcodeNumber = barcodeNumber,
+                itemCode = itemCode,
+                itemName = foundItem.itemName.toString(),
+                itemPrice = itemPrice,
+                quantity = totalCount!!,
+                totalPrice = totalPriceAll!!,
+            )
+        }
+
+        if (isUpdated == 0) {
+            insertSingleReport(
+                barcodeNumber,
+                itemCode,
+                itemName,
+                itemPrice,
+                quantity,
+                totalPrice,
+            )
+        }
+
+    }
+
+    private suspend fun safeHandleSingleReportItem(fromDate: String, toDate: String) {
+        val list = repository.getSingleReportDateWise(fromDate, toDate)
+        _singleReportItem.postValue(list)
+    }
+
+    private suspend fun safeHandleBuyerReport() {
+        val list = repository.getAllBuyerReport()
+        _buyerReport.postValue(list)
+    }
+
+    private suspend fun handleInsertBuyerReport(
+        name: String,
+        cartList: ArrayList<ScannedData>?,
+        phoneNumber: String,
+        total: String
+    ) {
+        val buyerReport = BuyerReportModal(
+            id = null,
+            name = name,
+            cartList = cartList,
+            phoneNumber = phoneNumber,
+            total = total,
+        )
+        repository.insertBuyerReport(buyerReport)
+    }
+
+    private suspend fun handleUpdateBuyerReport(
+        id: Int,
+        name: String,
+        cartList: ArrayList<ScannedData>?,
+        phoneNumber: String,
+        total: String
+    ) {
+        val buyerReport = BuyerReportModal(
+            id,
+            name,
+            cartList,
+            phoneNumber,
+            total
+        )
+
+        repository.updateBuyerReport(buyerReport)
+    }
+
+    private fun insertBuyerReport(
+        name: String,
+        cartList: ArrayList<ScannedData>?,
+        phoneNumber: String,
+        total: String
+    ) = viewModelScope.launch {
+        handleInsertBuyerReport(
+            name, cartList, phoneNumber, total
+        )
+    }
+
+    private fun updateBuyerReport(
+        id: Int,
+        name: String,
+        cartList: ArrayList<ScannedData>?,
+        phoneNumber: String,
+        total: String
+    ) = viewModelScope.launch {
+        handleUpdateBuyerReport(
+            id, name, cartList, phoneNumber, total
+        )
+    }
+
+    private suspend fun handleUpdateAndInsertBuyerReport(
+        name: String,
+        cartList: ArrayList<ScannedData>?,
+        phoneNumber: String,
+        total: String
+    ) {
+        val itemList = repository.getAllBuyerReport()
+        val foundItem = itemList.find { it.name.equals(name) }
+        var isUpdated = 0       // 0 == NotUpdated,  1 == Updated
+        if (foundItem != null) {
+            val totalPriceAll = foundItem.total?.toInt()?.plus(total.toInt())
+            cartList?.let { foundItem.cartList?.addAll(it) }
+            isUpdated = 1
+            updateBuyerReport(
+                id = foundItem.id!!,
+                name = name,
+                cartList = foundItem.cartList,
+                phoneNumber = phoneNumber,
+                total = totalPriceAll.toString()
+            )
+        }
+
+        if (isUpdated == 0) {
+            insertBuyerReport(
+                name, cartList, phoneNumber, total
+            )
+        }
+    }
+
+    fun insertAndUpdateBuyerReport(
+        name: String,
+        cartList: ArrayList<ScannedData>?,
+        phoneNumber: String,
+        total: String
+    ) = viewModelScope.launch {
+        handleUpdateAndInsertBuyerReport(
+            name, cartList, phoneNumber, total
+        )
+    }
 }

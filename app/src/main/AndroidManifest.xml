@@ -24,10 +24,31 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.App.Starting">
         <activity
+            android:name=".ChartBuyerReportActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Ui.Report.BuyerReport.BuyerReportActivity"
+            android:exported="false"
+            android:theme="@style/Theme.BarcodeScanner" />
+        <activity
+            android:name=".Ui.Report.SingleReport.SingleReportActivity"
+            android:exported="false"
+            android:theme="@style/Theme.BarcodeScanner" />
+        <activity
+            android:name=".Ui.Vendor.VendorActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.BarcodeScanner" />
+        <activity
+            android:name=".Ui.Report.ReportActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.BarcodeScanner" />
+        <activity
             android:name=".Ui.History.SingleHistoryActivity"
             android:exported="false"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.BarcodeScanner"/>
+            android:theme="@style/Theme.BarcodeScanner" />
         <activity
             android:name=".Ui.History.HistoryActivity"
             android:exported="false"
@@ -44,11 +65,11 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.BarcodeScanner" />
         <activity
-            android:name=".Utils.PdfGenerate.PDFActivity"
+            android:name="com.wedoapps.barcodescanner.Ui.PdfGenerate.PDFActivity"
             android:configChanges="orientation|screenSize"
             android:theme="@style/AppTheme.TransparentStatusBar" />
         <activity
-            android:name=".Utils.PdfGenerate.PdfViewerActivity"
+            android:name="com.wedoapps.barcodescanner.Ui.PdfGenerate.PdfViewerActivity"
             android:configChanges="orientation|screenSize"
             android:theme="@style/AppTheme.TransparentStatusBar" />
 

@@ -1,4 +1,4 @@
-package com.wedoapps.barcodescanner.Utils.PdfGenerate
+package com.wedoapps.barcodescanner.Ui.PdfGenerate
 
 import android.content.Intent
 import android.graphics.drawable.ColorDrawable

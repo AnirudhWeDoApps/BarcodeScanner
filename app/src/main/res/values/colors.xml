@@ -9,6 +9,7 @@
     <color name="transparent_bg">#11FFFFFF</color>
     <color name="white">#FFFFFFFF</color>
     <color name="colorPrimary">#ffeb3b</color>
+    <color name="semiColorPrimary">#88ffeb3b</color>
     <color name="ColorPrimaryLight">#ffff72</color>
     <color name="ColorPrimaryDark">#c8b900</color>
     <color name="ColorPrimaryTextColor">#000000</color>

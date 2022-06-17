@@ -83,7 +83,7 @@ class BarcodeDataRecyclerAdapter(
     }
 
     override fun getItemCount(): Int {
-        return dataList!!.size
+        return dataList?.size ?: 0
     }
 
     interface OnClick {

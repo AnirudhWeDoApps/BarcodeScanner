@@ -5,14 +5,13 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import com.wedoapps.barcodescanner.Model.BarcodeEntryItem
-import com.wedoapps.barcodescanner.Model.PDFData
-import com.wedoapps.barcodescanner.Model.ScannedData
-import com.wedoapps.barcodescanner.Model.Users
+import com.wedoapps.barcodescanner.Model.*
+import com.wedoapps.barcodescanner.Utils.Constants.MIGRATION_1_2
 import com.wedoapps.barcodescanner.Utils.Convertor
 
+
 @Database(
-    entities = [ScannedData::class, BarcodeEntryItem::class, Users::class, PDFData::class],
+    entities = [ScannedData::class, BarcodeEntryItem::class, Users::class, PDFData::class, VendorModel::class, SingleReportModel::class, BuyerReportModal::class],
     version = 1,
     exportSchema = true
 )
@@ -40,8 +39,10 @@ abstract class BarcodeDatabase : RoomDatabase() {
                 context.applicationContext,
                 BarcodeDatabase::class.java,
                 "Barcode.db"
-            ).fallbackToDestructiveMigration()
+            ).addMigrations(MIGRATION_1_2)
+                .fallbackToDestructiveMigration()
                 .build()
     }
+
 
 }

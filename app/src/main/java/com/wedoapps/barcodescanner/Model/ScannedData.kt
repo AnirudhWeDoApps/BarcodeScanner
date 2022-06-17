@@ -12,6 +12,7 @@ data class ScannedData(
     @PrimaryKey(autoGenerate = true)
     var id: Int? = null,
     var barcodeNumber: String? = "",
+    var itemCode: String? = "",
     var item: String? = "",
     var price: Int? = null,
     var originalPrice: Int? = null,

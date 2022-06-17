@@ -16,4 +16,6 @@ data class Users(
     var address1: String? = "",
     var city: String? = "",
     var pincode: String? = ""
-) : Parcelable
+) : Parcelable {
+
+}

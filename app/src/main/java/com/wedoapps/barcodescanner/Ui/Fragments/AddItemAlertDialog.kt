@@ -80,6 +80,7 @@ class AddItemAlertDialog : DialogFragment() {
                         )
                         viewModel.updateScannedItem(
                             binding.inputBarcode.editText?.text.toString(),
+                            binding.inputBarcodeCode.editText?.text.toString(),
                             binding.inputItemName.editText?.text.toString(),
                             binding.inputSellingPrice.editText?.text.toString()
                                 .toInt(),
@@ -124,11 +125,11 @@ class AddItemAlertDialog : DialogFragment() {
         val price = binding.inputPrice.editText
         val sellingPrice = binding.inputSellingPrice.editText
         val quantity = binding.inputQuantity.editText
-     /*   // Barcode
-        if (barcodeNumber?.text.toString().isEmpty()) {
-            barcodeNumber?.error = "Field Cannot be Empty"
-            return false
-        }*/
+        /*   // Barcode
+           if (barcodeNumber?.text.toString().isEmpty()) {
+               barcodeNumber?.error = "Field Cannot be Empty"
+               return false
+           }*/
 
         // ItemCode
         if (barcodeCode?.text.toString().isEmpty()) {
@@ -199,6 +200,7 @@ class AddItemAlertDialog : DialogFragment() {
     private fun updateScannedData(inserted: Boolean) {
         viewModel.insertAndUpdateScannedData(
             binding.inputBarcode.editText?.text.toString(),
+            binding.inputBarcodeCode.editText?.text.toString(),
             binding.inputItemName.editText?.text.toString(),
             binding.inputSellingPrice.editText?.text.toString().toInt(),
             binding.inputQuantity.editText?.text.toString().toInt(),

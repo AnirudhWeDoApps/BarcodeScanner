@@ -143,7 +143,7 @@ class MainActivity : AppCompatActivity(), MainDataRecyclerAdapter.OnClick,
         })
 
         viewIncluded.btnCheckout.setOnClickListener {
-            if (!quantityHashMap.isNullOrEmpty()) {
+            if (quantityHashMap.isNotEmpty()) {
                 alertDialog("Minimum Quantity Exceeding For Items", 0)
             } else {
                 startActivity(Intent(this, CartActivity::class.java))
@@ -240,13 +240,14 @@ class MainActivity : AppCompatActivity(), MainDataRecyclerAdapter.OnClick,
         viewModel.updateScannedData(
             id = data.id!!,
             barcodeNumber = data.barcodeNumber.toString(),
+            itemCode = data.itemCode.toString(),
             item = data.item.toString(),
             price = data.price!!,
             data.originalPrice!!,
             data.storeQuantity!!,
             data.minCount!!,
             count = data.count!!,
-            showDialog = data.showDialog
+            showDialog = data.showDialog,
         )
 
         dataAdapter.updateData(scannedDataList)
@@ -270,6 +271,7 @@ class MainActivity : AppCompatActivity(), MainDataRecyclerAdapter.OnClick,
         viewModel.updateScannedData(
             id = data.id!!,
             barcodeNumber = data.barcodeNumber.toString(),
+            itemCode = data.itemCode.toString(),
             item = data.item.toString(),
             price = data.price!!,
             data.originalPrice!!,

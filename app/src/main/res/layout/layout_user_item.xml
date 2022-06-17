@@ -49,7 +49,7 @@
             android:id="@+id/editBtn"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:background="@android:color/holo_blue_light"
+            android:background="@color/colorPrimary"
             android:text="Edit"
             android:textColor="@color/ColorPrimaryTextColor"
             app:icon="@drawable/ic_edit"

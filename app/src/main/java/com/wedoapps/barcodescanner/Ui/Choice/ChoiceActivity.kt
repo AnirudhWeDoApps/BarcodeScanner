@@ -17,9 +17,11 @@ import com.wedoapps.barcodescanner.BarcodeViewModel
 import com.wedoapps.barcodescanner.Model.ChoiceModel
 import com.wedoapps.barcodescanner.R
 import com.wedoapps.barcodescanner.Ui.History.HistoryActivity
+import com.wedoapps.barcodescanner.Ui.Report.ReportActivity
 import com.wedoapps.barcodescanner.Ui.Scanner.MainActivity
 import com.wedoapps.barcodescanner.Ui.Search.SearchActivity
 import com.wedoapps.barcodescanner.Ui.Users.UserListActivity
+import com.wedoapps.barcodescanner.Ui.Vendor.VendorActivity
 import com.wedoapps.barcodescanner.Utils.BarcodeApplication
 import com.wedoapps.barcodescanner.Utils.Constants
 import com.wedoapps.barcodescanner.Utils.ViewModelProviderFactory
@@ -77,8 +79,18 @@ class ChoiceActivity : AppCompatActivity(), ChoiceAdapter.OnChoiceClick {
             ),
             ChoiceModel(
                 4,
+                getString(R.string.vendor),
+                ContextCompat.getDrawable(this, R.drawable.vendor)
+            ),
+            ChoiceModel(
+                5,
                 getString(R.string.billing_history),
                 ContextCompat.getDrawable(this, R.drawable.history)
+            ),
+            ChoiceModel(
+                6,
+                getString(R.string.report),
+                ContextCompat.getDrawable(this, R.drawable.report)
             ),
         )
 
@@ -140,6 +152,14 @@ class ChoiceActivity : AppCompatActivity(), ChoiceAdapter.OnChoiceClick {
 
             getString(R.string.billing_history) -> {
                 startActivity(Intent(this, HistoryActivity::class.java))
+            }
+
+            getString(R.string.vendor) -> {
+                startActivity(Intent(this, VendorActivity::class.java))
+            }
+
+            getString(R.string.report) -> {
+                startActivity(Intent(this, ReportActivity::class.java))
             }
         }
     }

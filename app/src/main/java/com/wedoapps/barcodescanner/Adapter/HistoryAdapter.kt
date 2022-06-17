@@ -21,7 +21,7 @@ class HistoryAdapter(private val listener: OnHistoryItemClick) :
                 var total = data.total?.toInt()
                 total = data.total?.toInt()?.let { total?.plus(it) }
                 tvUserNameHistory.text = data.name
-                tvDateHistory.text = data.date
+                tvDateHistory.text = "${data.date}-${data.time}"
                 tvTotalAmtHistory.text = itemView.context.getString(R.string.Rs) + data.total
 
                 root.setOnClickListener {

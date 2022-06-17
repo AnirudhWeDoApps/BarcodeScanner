@@ -1,10 +1,7 @@
 package com.wedoapps.barcodescanner.Repository
 
 import com.wedoapps.barcodescanner.Db.BarcodeDatabase
-import com.wedoapps.barcodescanner.Model.BarcodeEntryItem
-import com.wedoapps.barcodescanner.Model.PDFData
-import com.wedoapps.barcodescanner.Model.ScannedData
-import com.wedoapps.barcodescanner.Model.Users
+import com.wedoapps.barcodescanner.Model.*
 
 
 class BarcodeRepository(private val db: BarcodeDatabase) {
@@ -44,6 +41,7 @@ class BarcodeRepository(private val db: BarcodeDatabase) {
 
     fun getAllUserList() = db.getBarcodeDao().getAllUserList()
 
+
     suspend fun deleteScannedData() = db.getBarcodeDao().deleteScannedData()
 
     suspend fun addHistoryItem(pdfData: PDFData) = db.getBarcodeDao().addHistoryItem(pdfData)
@@ -52,5 +50,45 @@ class BarcodeRepository(private val db: BarcodeDatabase) {
 
     fun getAllHistoryList() = db.getBarcodeDao().getAllHistoryList()
 
-    suspend fun getHistoryDate(toDate: String, fromDate: String) = db.getBarcodeDao().getHistoryFromDate(toDate, fromDate)
+    suspend fun getAllHistoryListWO() = db.getBarcodeDao().getAllHistoryListWO()
+
+    suspend fun getHistoryDate(toDate: String, fromDate: String) =
+        db.getBarcodeDao().getHistoryFromDate(toDate, fromDate)
+
+    fun getAllVendorList() = db.getBarcodeDao().getAllVendorList()
+
+    suspend fun addVendorItem(vendorModel: VendorModel) = db.getBarcodeDao().addVendor(vendorModel)
+
+    suspend fun updateVendorItem(vendorModel: VendorModel) =
+        db.getBarcodeDao().updateVendor(vendorModel)
+
+    suspend fun deleteVendorItem(vendorModel: VendorModel) =
+        db.getBarcodeDao().deleteVendor(vendorModel)
+
+    suspend fun getVendorById(id: Int) = db.getBarcodeDao().getVendorById(id)
+
+    suspend fun insertSingleReport(reportModel: SingleReportModel) =
+        db.getBarcodeDao().insertSingleReport(reportModel)
+
+    suspend fun updateSingleReport(reportModel: SingleReportModel) =
+        db.getBarcodeDao().updateSingleReport(reportModel)
+
+    suspend fun deleteSingleReport(reportModel: SingleReportModel) =
+        db.getBarcodeDao().deleteSingleReport(reportModel)
+
+    suspend fun getAllSingleReport() = db.getBarcodeDao().getAllSingleReport()
+
+    suspend fun getSingleReportDateWise(toDate: String, fromDate: String) =
+        db.getBarcodeDao().getSingleReportFromDate(toDate, fromDate)
+
+    suspend fun insertBuyerReport(buyerReportModal: BuyerReportModal) =
+        db.getBarcodeDao().insertBuyerReport(buyerReportModal)
+
+    suspend fun updateBuyerReport(buyerReportModal: BuyerReportModal) =
+        db.getBarcodeDao().updateBuyerReport(buyerReportModal)
+
+    suspend fun deleteBuyerReport(buyerReportModal: BuyerReportModal) =
+        db.getBarcodeDao().deleteBuyerReport(buyerReportModal)
+
+    suspend fun getAllBuyerReport() = db.getBarcodeDao().getAllBuyerReport()
 }

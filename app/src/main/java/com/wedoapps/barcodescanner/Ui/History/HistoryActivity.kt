@@ -33,6 +33,12 @@ class HistoryActivity : AppCompatActivity(), HistoryAdapter.OnHistoryItemClick {
         )
     }
 
+    @SuppressLint("SimpleDateFormat")
+    var dfDate = SimpleDateFormat("dd/MM/yyyy")
+
+    private lateinit var datePickerTO: DatePickerDialog
+    private lateinit var datePickerFROM: DatePickerDialog
+
     @SuppressLint("SetTextI18n", "SimpleDateFormat")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,53 +58,69 @@ class HistoryActivity : AppCompatActivity(), HistoryAdapter.OnHistoryItemClick {
         }
 
         val calendar = Calendar.getInstance()
+
         val year = calendar.get(Calendar.YEAR)
         val month = calendar.get(Calendar.MONTH)
         val day = calendar.get(Calendar.DAY_OF_MONTH)
         val okColor = ContextCompat.getColor(this, R.color.gd_center)
         val cancelColor = ContextCompat.getColor(this, R.color.gd_center)
-        binding.tvToDate.text = SimpleDateFormat("dd/MM/yyyy").format(System.currentTimeMillis())
-        binding.tvFromDate.text = SimpleDateFormat("dd/MM/yyyy").format(System.currentTimeMillis())
+        binding.tvToDate.text = dfDate.format(System.currentTimeMillis())
+        binding.tvFromDate.text = dfDate.format(System.currentTimeMillis())
 
-        val datePickerDialogTO =
+        datePickerFROM =
             DatePickerDialog(
                 this,
                 R.style.DialogTheme,
                 { _, yearDP, monthOfYear, dayOfMonth ->
-                    binding.tvToDate.text = ("$dayOfMonth/${monthOfYear + 1}/$yearDP")
-//                    toDate = binding.tvToDate.text as String
+                    val fmonth = monthOfYear + 1
+                    var fm = "" + fmonth
+                    var fd = "" + dayOfMonth
+                    if (fmonth < 10) {
+                        fm = "0$fmonth"
+                    }
+                    if (dayOfMonth < 10) {
+                        fd = "0$dayOfMonth"
+                    }
+                    binding.tvFromDate.text = "$fd/$fm/$yearDP"
                 },
                 year,
                 month,
                 day
             )
 
-
-        val datePickerDialogFROM =
+        datePickerTO =
             DatePickerDialog(
                 this,
                 R.style.DialogTheme,
                 { _, yearDP, monthOfYear, dayOfMonth ->
-                    binding.tvFromDate.text = ("$dayOfMonth/${monthOfYear + 1}/$yearDP")
-//                    fromDate = binding.tvFromDate.text as String
+                    val fmonth = monthOfYear + 1
+                    var fm = "" + fmonth
+                    var fd = "" + dayOfMonth
+                    if (fmonth < 10) {
+                        fm = "0$fmonth"
+                    }
+                    if (dayOfMonth < 10) {
+                        fd = "0$dayOfMonth"
+                    }
+                    val toDate = "$fd/$fm/$yearDP"
+                    binding.tvToDate.text = toDate
                 },
                 year,
                 month,
                 day
             )
-
-
+        datePickerFROM.datePicker.minDate = calendar.timeInMillis
 
         binding.tvToDate.setOnClickListener {
-            datePickerDialogTO.show()
-            datePickerDialogTO.getButton(DatePickerDialog.BUTTON_POSITIVE).setTextColor(okColor)
-            datePickerDialogTO.getButton(DatePickerDialog.BUTTON_NEGATIVE).setTextColor(cancelColor)
+            datePickerTO.show()
+            datePickerTO.getButton(DatePickerDialog.BUTTON_POSITIVE).setTextColor(okColor)
+            datePickerTO.getButton(DatePickerDialog.BUTTON_NEGATIVE).setTextColor(cancelColor)
         }
 
         binding.tvFromDate.setOnClickListener {
-            datePickerDialogFROM.show()
-            datePickerDialogFROM.getButton(DatePickerDialog.BUTTON_POSITIVE).setTextColor(okColor)
-            datePickerDialogFROM.getButton(DatePickerDialog.BUTTON_NEGATIVE)
+            datePickerFROM.show()
+            datePickerFROM.getButton(DatePickerDialog.BUTTON_POSITIVE).setTextColor(okColor)
+            datePickerFROM.getButton(DatePickerDialog.BUTTON_NEGATIVE)
                 .setTextColor(cancelColor)
         }
 
@@ -161,5 +183,4 @@ class HistoryActivity : AppCompatActivity(), HistoryAdapter.OnHistoryItemClick {
             binding.tvFromDate.text as String
         )
     }
-
 }

@@ -58,6 +58,7 @@ class MainDataRecyclerAdapter(private var list: List<ScannedData>?, private val 
                             val newData = ScannedData(
                                 item.id,
                                 item.barcodeNumber,
+                                item.itemCode.toString(),
                                 item.item,
                                 price,
                                 item.originalPrice,
@@ -85,6 +86,7 @@ class MainDataRecyclerAdapter(private var list: List<ScannedData>?, private val 
                                 val newData = ScannedData(
                                     item.id,
                                     item.barcodeNumber,
+                                    item.itemCode,
                                     item.item,
                                     price,
                                     item.originalPrice,

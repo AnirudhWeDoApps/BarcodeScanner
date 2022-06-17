@@ -1,4 +1,4 @@
-package com.wedoapps.barcodescanner.Utils.PdfGenerate
+package com.wedoapps.barcodescanner.Ui.PdfGenerate
 
 import android.content.Intent
 import android.graphics.Color
@@ -280,6 +280,16 @@ class PDFActivity : PDFCreatorActivity() {
                 pdfData?.time.toString()
             )
         }
+        pdfData?.cartList?.forEach { data ->
+            viewModel.updateAndInsertSingleReport(
+                data.barcodeNumber.toString(),
+                data.itemCode.toString(),
+                data.item.toString(),
+                data.originalPrice!!,
+                data.count!!,
+                data.price!!
+            )
+        }
         val pdfUri: Uri = Uri.fromFile(savedPDFFile)
 
         val intentPdfViewer = Intent(
@@ -316,6 +326,13 @@ class PDFActivity : PDFCreatorActivity() {
     ) {
         viewModel.addHistoryItem(
             name, itemList, phoneNumber, total, date, time
+        )
+
+        viewModel.insertAndUpdateBuyerReport(
+            name,
+            itemList,
+            phoneNumber,
+            total
         )
     }
 

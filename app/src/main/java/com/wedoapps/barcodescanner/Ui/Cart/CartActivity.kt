@@ -21,17 +21,16 @@ import com.wedoapps.barcodescanner.Model.ScannedData
 import com.wedoapps.barcodescanner.Model.Users
 import com.wedoapps.barcodescanner.R
 import com.wedoapps.barcodescanner.Ui.Fragments.AddUserFragment
+import com.wedoapps.barcodescanner.Ui.PdfGenerate.PDFActivity
 import com.wedoapps.barcodescanner.Ui.Scanner.MainActivity
 import com.wedoapps.barcodescanner.Utils.BarcodeApplication
 import com.wedoapps.barcodescanner.Utils.Constants.IS_NEW
 import com.wedoapps.barcodescanner.Utils.Constants.PDF_DATA
-import com.wedoapps.barcodescanner.Utils.PdfGenerate.PDFActivity
 import com.wedoapps.barcodescanner.Utils.SharedPreferenceManager
 import com.wedoapps.barcodescanner.Utils.ViewModelProviderFactory
 import com.wedoapps.barcodescanner.Utils.searchablespinner.interfaces.IStatusListener
 import com.wedoapps.barcodescanner.Utils.searchablespinner.interfaces.OnItemSelectedListener
 import com.wedoapps.barcodescanner.databinding.ActivityCartBinding
-
 
 class CartActivity : AppCompatActivity(), DataRecyclerAdapter.OnClick, AddUserFragment.OnWorkDone {
 
@@ -47,9 +46,8 @@ class CartActivity : AppCompatActivity(), DataRecyclerAdapter.OnClick, AddUserFr
     private lateinit var prefs: SharedPreferenceManager
     private var userAdapter: ArrayAdapter<String>? = null
     private var isSpinnerOpen = false
-    private var quantity: Int? = null
+    private var barcodeNumber: String? = ""
     private var name: String? = null
-    private var count: Int? = null
     private var partyNameUpdate: String? = ""
     private var dataList = mutableListOf<ScannedData>()
     private var barcodeList = mutableListOf<BarcodeEntryItem>()
@@ -132,8 +130,7 @@ class CartActivity : AppCompatActivity(), DataRecyclerAdapter.OnClick, AddUserFr
                 dataList = it as MutableList<ScannedData>
                 hideEmpty()
                 it.forEach { data ->
-                    quantity = data.count
-                    count = data.storeQuantity
+                    barcodeNumber = data.barcodeNumber
                     name = data.item
                     total += data.price!!
                     if (data.storeQuantity!! <= 0) {
