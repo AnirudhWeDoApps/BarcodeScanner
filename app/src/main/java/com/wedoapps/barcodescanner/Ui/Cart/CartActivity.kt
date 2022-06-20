@@ -123,7 +123,6 @@ class CartActivity : AppCompatActivity(), DataRecyclerAdapter.OnClick, AddUserFr
     override fun onResume() {
         super.onResume()
         viewModel.getScannedDataList().observe(this) {
-
             if (it.isNullOrEmpty()) {
                 showEmpty()
             } else {
@@ -168,9 +167,13 @@ class CartActivity : AppCompatActivity(), DataRecyclerAdapter.OnClick, AddUserFr
     private fun setupSpinnerItem() {
         val tempList = arrayListOf<String>()
         viewModel.getUserList().observe(this) {
-            userList.addAll(it)
-            for (i in it.indices) {
-                tempList.add(it[i].name.toString())
+            if (it.isNullOrEmpty()) {
+                prefs.clearNames()
+            } else {
+                userList.addAll(it)
+                for (i in it.indices) {
+                    tempList.add(it[i].name.toString())
+                }
             }
             val hashSet = hashSetOf<String>()
             hashSet.addAll(tempList)

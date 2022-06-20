@@ -16,6 +16,8 @@ import com.wedoapps.barcodescanner.R
 import com.wedoapps.barcodescanner.Utils.BarcodeApplication
 import com.wedoapps.barcodescanner.Utils.Constants.BARCODE
 import com.wedoapps.barcodescanner.Utils.Constants.BARCODE_DATA
+import com.wedoapps.barcodescanner.Utils.Constants.BY_MANUAL
+import com.wedoapps.barcodescanner.Utils.Constants.MANUALLY
 import com.wedoapps.barcodescanner.Utils.ViewModelProviderFactory
 import com.wedoapps.barcodescanner.databinding.LayoutAddItemAlertBinding
 
@@ -44,6 +46,7 @@ class AddItemAlertDialog : DialogFragment() {
 
         val bundle = arguments
         val barcodeNumber = bundle?.getString(BARCODE)
+        val by = bundle?.getString(BY_MANUAL)
         val data: BarcodeEntryItem? = bundle?.getParcelable(BARCODE_DATA)
 
         // Barcode Only
@@ -86,7 +89,7 @@ class AddItemAlertDialog : DialogFragment() {
                                 .toInt(),
                             binding.inputQuantity.editText?.text.toString().toInt(),
                         )
-                        updateScannedData(false)
+                        updateScannedData("", false)
                         dismiss()
                         listener.onSheetClose(false)
                     } else {
@@ -100,7 +103,7 @@ class AddItemAlertDialog : DialogFragment() {
                             count = binding.inputQuantity.editText?.text.toString().toInt(),
                             minCount = emptyMin()
                         )
-                        updateScannedData(false)
+                        updateScannedData(by.toString(), false)
                         dismiss()
                         listener.onSheetClose(false)
                     }
@@ -197,17 +200,19 @@ class AddItemAlertDialog : DialogFragment() {
         }
     }
 
-    private fun updateScannedData(inserted: Boolean) {
-        viewModel.insertAndUpdateScannedData(
-            binding.inputBarcode.editText?.text.toString(),
-            binding.inputBarcodeCode.editText?.text.toString(),
-            binding.inputItemName.editText?.text.toString(),
-            binding.inputSellingPrice.editText?.text.toString().toInt(),
-            binding.inputQuantity.editText?.text.toString().toInt(),
-            emptyMin(),
-            binding.inputSellingPrice.editText?.text.toString().toInt(),
-            inserted
-        )
+    private fun updateScannedData(by: String, inserted: Boolean) {
+        if (by != MANUALLY) {
+            viewModel.insertAndUpdateScannedData(
+                binding.inputBarcode.editText?.text.toString(),
+                binding.inputBarcodeCode.editText?.text.toString(),
+                binding.inputItemName.editText?.text.toString(),
+                binding.inputSellingPrice.editText?.text.toString().toInt(),
+                binding.inputQuantity.editText?.text.toString().toInt(),
+                emptyMin(),
+                binding.inputSellingPrice.editText?.text.toString().toInt(),
+                inserted
+            )
+        }
     }
 
 

@@ -643,6 +643,10 @@ class BarcodeViewModel(
         _buyerReport.postValue(list)
     }
 
+    fun buyerReport() = viewModelScope.launch {
+        safeHandleBuyerReport()
+    }
+
     private suspend fun handleInsertBuyerReport(
         name: String,
         cartList: ArrayList<ScannedData>?,

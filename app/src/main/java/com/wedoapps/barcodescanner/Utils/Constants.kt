@@ -20,6 +20,9 @@ object Constants {
     const val REQUEST_CODE = 1
     const val HISTORY_DATA = "HistoryData"
     const val VENDOR_DATA = "VendorData"
+    const val BUYER_DATA = "BuyerData"
+    const val BY_MANUAL = "ByManual"
+    const val MANUALLY = "Manually"
 
     val MIGRATION_1_2: Migration = object : Migration(1, 2) {
         override fun migrate(database: SupportSQLiteDatabase) {

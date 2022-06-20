@@ -79,7 +79,7 @@ class PdfViewerActivity : PDFViewerActivity() {
                 finish()
             }
             R.id.download -> {
-                val fileName = "${pdfData?.name}-${pdfData?.date}-${pdfData?.time}"
+                val fileName = "${pdfData?.name}_${pdfData?.date}_${pdfData?.time}"
                 createFile(fileName)
 
             }

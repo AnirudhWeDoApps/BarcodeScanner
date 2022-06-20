@@ -23,6 +23,8 @@ import com.wedoapps.barcodescanner.Ui.Fragments.AddItemAlertDialog
 import com.wedoapps.barcodescanner.Ui.Scanner.MainActivity
 import com.wedoapps.barcodescanner.Utils.BarcodeApplication
 import com.wedoapps.barcodescanner.Utils.Constants
+import com.wedoapps.barcodescanner.Utils.Constants.BY_MANUAL
+import com.wedoapps.barcodescanner.Utils.Constants.MANUALLY
 import com.wedoapps.barcodescanner.Utils.ViewModelProviderFactory
 import com.wedoapps.barcodescanner.databinding.ActivitySearchBinding
 import java.util.*
@@ -238,6 +240,9 @@ class SearchActivity : AppCompatActivity(), BarcodeDataRecyclerAdapter.OnClick,
         binding.apply {
             fabManually.setOnClickListener {
                 val addItemDialog = AddItemAlertDialog()
+                val bundle = Bundle()
+                bundle.putString(BY_MANUAL, MANUALLY)
+                addItemDialog.arguments = bundle
                 addItemDialog.show(supportFragmentManager, addItemDialog.tag)
                 fabAdd.collapse()
             }

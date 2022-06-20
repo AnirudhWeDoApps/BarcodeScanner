@@ -24,15 +24,19 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.App.Starting">
         <activity
-            android:name=".ChartBuyerReportActivity"
-            android:exported="false" />
+            android:name=".Ui.Report.BuyerReport.ChartBuyerReportActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.BarcodeScanner"/>
         <activity
             android:name=".Ui.Report.BuyerReport.BuyerReportActivity"
             android:exported="false"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.BarcodeScanner" />
         <activity
             android:name=".Ui.Report.SingleReport.SingleReportActivity"
             android:exported="false"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.BarcodeScanner" />
         <activity
             android:name=".Ui.Vendor.VendorActivity"

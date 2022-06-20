@@ -16,7 +16,7 @@ class DataRecyclerAdapter(private var list: List<ScannedData>?) :
         @SuppressLint("SetTextI18n")
         fun binding(data: ScannedData) {
             binding.apply {
-                tvPdfIndex.text = layoutPosition.toString()
+                tvPdfIndex.text = ("${bindingAdapterPosition + 1}.").toString()
                 tvPdfItem.text = data.item
                 tvPdfCount.text = data.count.toString()
                 tvPdfPriceSingle.text =
