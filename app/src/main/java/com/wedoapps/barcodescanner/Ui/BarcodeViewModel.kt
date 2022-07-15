@@ -8,7 +8,13 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.wedoapps.barcodescanner.Model.*
 import com.wedoapps.barcodescanner.Repository.BarcodeRepository
+import com.wedoapps.barcodescanner.Utils.Constants.ALL
+import com.wedoapps.barcodescanner.Utils.Constants.DATE_RANGE
+import com.wedoapps.barcodescanner.Utils.Constants.LAST_MONTH
+import com.wedoapps.barcodescanner.Utils.Constants.LAST_WEEK
 import com.wedoapps.barcodescanner.Utils.Constants.TAG
+import com.wedoapps.barcodescanner.Utils.Constants.THIS_DAY
+import com.wedoapps.barcodescanner.Utils.Constants.THIS_MONTH
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -572,8 +578,27 @@ class BarcodeViewModel(
          repository.deleteSingleReport(reportModel)
      }*/
 
-    fun singleReportItem(fromDate: String, toDate: String) = viewModelScope.launch {
-        safeHandleSingleReportItem(fromDate, toDate)
+    fun singleReportItem(type: String, fromDate: String, toDate: String) = viewModelScope.launch {
+        when (type) {
+            ALL -> {
+                safeHandleAllSingleReport()
+            }
+            THIS_MONTH -> {
+                safeHandleCurrentMonthReport()
+            }
+            THIS_DAY -> {
+                handleLastDateReportData()
+            }
+            LAST_WEEK -> {
+                safeHandleLastWeekReport()
+            }
+            LAST_MONTH -> {
+                safeHandleLastMonthReport()
+            }
+            DATE_RANGE -> {
+                safeHandleSingleReportItem(fromDate, toDate)
+            }
+        }
     }
 
     fun updateAndInsertSingleReport(
@@ -742,5 +767,30 @@ class BarcodeViewModel(
         handleUpdateAndInsertBuyerReport(
             name, cartList, phoneNumber, total
         )
+    }
+
+    private suspend fun handleLastDateReportData() {
+        val list = repository.getLastDateReport()
+        _singleReportItem.postValue(list)
+    }
+
+    private suspend fun safeHandleAllSingleReport() {
+        val list = repository.getAllSingleReport()
+        _singleReportItem.postValue(list)
+    }
+
+    private suspend fun safeHandleLastWeekReport() {
+        val list = repository.getLastWeekReport()
+        _singleReportItem.postValue(list)
+    }
+
+    private suspend fun safeHandleLastMonthReport() {
+        val list = repository.getLastMonthReport()
+        _singleReportItem.postValue(list)
+    }
+
+    private suspend fun safeHandleCurrentMonthReport() {
+        val list = repository.getCurrentMonthReport()
+        _singleReportItem.postValue(list)
     }
 }

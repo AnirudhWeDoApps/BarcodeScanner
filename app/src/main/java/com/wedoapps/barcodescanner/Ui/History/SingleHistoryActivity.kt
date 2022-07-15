@@ -49,6 +49,7 @@ class SingleHistoryActivity : AppCompatActivity() {
         binding.toolbar.ivAddUsers.setOnClickListener {
             val pdf = Intent(this, PDFActivity::class.java)
             pdf.putExtra(IS_NEW, false)
+            pdf.putExtra("Screen", "SingleHistory")
             pdf.putExtra(PDF_DATA, pdfData)
             startActivity(pdf)
             finish()

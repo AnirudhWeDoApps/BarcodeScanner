@@ -112,4 +112,17 @@ interface BarcodeDao {
     @Query("SELECT * FROM BuyerReport")
     suspend fun getAllBuyerReport(): List<BuyerReportModal>
 
+    @Query("SELECT * FROM singlereportmodal WHERE date >= date('now', '-1 days') AND date <  date('now')")
+    suspend fun getLastDayReport(): List<SingleReportModel>
+
+    @Query("SELECT * FROM singlereportmodal WHERE date >= date('now', '-7 days') AND date <  date('now')")
+    suspend fun getLastWeekReport(): List<SingleReportModel>
+
+    @Query("SELECT * FROM singlereportmodal WHERE date >= date('now','start of month','-1 month') AND date < date('now','start of month')")
+    suspend fun getLastMonthReport(): List<SingleReportModel>
+
+    @Query("SELECT * FROM singlereportmodal WHERE date = date('now','start of month')")
+    suspend fun getCurrentMonthReport(): List<SingleReportModel>
+
+
 }

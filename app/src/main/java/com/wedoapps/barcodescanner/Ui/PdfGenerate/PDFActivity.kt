@@ -46,6 +46,7 @@ class PDFActivity : PDFCreatorActivity() {
         )
     }
     private var isNew = true
+    private var screen = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,7 +55,7 @@ class PDFActivity : PDFCreatorActivity() {
 
         pdfData = intent.getParcelableExtra(PDF_DATA)
         isNew = intent.getBooleanExtra(IS_NEW, true)
-
+        screen = intent.getStringExtra("Screen").toString()
 
 
         createPDF(pdfData?.name + pdfData?.date + pdfData?.time, object : PDFUtil.PDFUtilListener {
@@ -309,10 +310,14 @@ class PDFActivity : PDFCreatorActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQUEST_CODE) {
-            val intent = Intent(this, MainActivity::class.java)
-            setResult(REQUEST_CODE, intent)
-            startActivity(intent)
-            finish()
+            if (screen == "SingleHistory") {
+                onBackPressed()
+            } else {
+                val intent = Intent(this, MainActivity::class.java)
+                setResult(REQUEST_CODE, intent)
+                startActivity(intent)
+                finish()
+            }
         }
     }
 

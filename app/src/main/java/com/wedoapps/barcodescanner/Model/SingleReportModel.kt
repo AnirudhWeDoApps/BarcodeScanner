@@ -21,7 +21,8 @@ data class SingleReportModel(
     var quantity: Int? = null,
     var totalPrice: Int? = null,
     var date: String = getDate(),
-    var time: String = getTime()
+    var time: String = getTime(),
+    var epochtime: String = getEpochTime()
 ) : Parcelable {
 
     constructor(
@@ -57,5 +58,14 @@ data class SingleReportModel(
             return currentTime.format(time)
         }
 
+        private fun getEpochTime(): String {
+            return try {
+                val sdf = SimpleDateFormat("dd/MM/yyyy")
+                val netDate = Date(getDate().toLong() * 1000)
+                sdf.format(netDate)
+            } catch (e: Exception) {
+                e.toString()
+            }
+        }
     }
 }

@@ -24,11 +24,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.App.Starting">
         <activity
-            android:name=".Ui.Report.BuyerReport.ChartBuyerReportActivity"
-            android:exported="false"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.BarcodeScanner"/>
-        <activity
             android:name=".Ui.Report.BuyerReport.BuyerReportActivity"
             android:exported="false"
             android:screenOrientation="portrait"
@@ -71,10 +66,12 @@
         <activity
             android:name="com.wedoapps.barcodescanner.Ui.PdfGenerate.PDFActivity"
             android:configChanges="orientation|screenSize"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.TransparentStatusBar" />
         <activity
             android:name="com.wedoapps.barcodescanner.Ui.PdfGenerate.PdfViewerActivity"
             android:configChanges="orientation|screenSize"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.TransparentStatusBar" />
 
         <provider

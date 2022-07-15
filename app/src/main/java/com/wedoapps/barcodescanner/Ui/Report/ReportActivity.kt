@@ -41,7 +41,7 @@ class ReportActivity : AppCompatActivity(), ChoiceAdapter.OnChoiceClick {
         val choiceData = mutableListOf(
             ChoiceModel(
                 1,
-                getString(R.string.buyer_report),
+                getString(R.string.vendor_report),
                 ContextCompat.getDrawable(this, R.drawable.generate_bill)
             ),
             ChoiceModel(
@@ -61,12 +61,12 @@ class ReportActivity : AppCompatActivity(), ChoiceAdapter.OnChoiceClick {
     }
 
     override fun onClick(model: ChoiceModel) {
-        when (model.menuItem) {
-            getString(R.string.buyer_report) -> {
+        when (model.id) {
+            1 -> {
                 startActivity(Intent(this, BuyerReportActivity::class.java))
             }
 
-            getString(R.string.single_report) -> {
+            2 -> {
                 startActivity(Intent(this, SingleReportActivity::class.java))
             }
         }

@@ -91,4 +91,12 @@ class BarcodeRepository(private val db: BarcodeDatabase) {
         db.getBarcodeDao().deleteBuyerReport(buyerReportModal)
 
     suspend fun getAllBuyerReport() = db.getBarcodeDao().getAllBuyerReport()
+
+    suspend fun getLastDateReport() = db.getBarcodeDao().getLastDayReport()
+
+    suspend fun getLastWeekReport() = db.getBarcodeDao().getLastWeekReport()
+
+    suspend fun getLastMonthReport() = db.getBarcodeDao().getLastMonthReport()
+
+    suspend fun getCurrentMonthReport() = db.getBarcodeDao().getCurrentMonthReport()
 }

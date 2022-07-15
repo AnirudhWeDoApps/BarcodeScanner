@@ -42,6 +42,7 @@
         <entry key="..\:/AndroidProjects/BarcodeScanner/app/src/main/res/layout/activity_splash.xml" value="0.25" />
         <entry key="..\:/AndroidProjects/BarcodeScanner/app/src/main/res/layout/activity_vendor.xml" value="0.136" />
         <entry key="..\:/AndroidProjects/BarcodeScanner/app/src/main/res/layout/custom_barcode_scanner.xml" value="0.176" />
+        <entry key="..\:/AndroidProjects/BarcodeScanner/app/src/main/res/layout/custom_marker_view.xml" value="0.402676399026764" />
         <entry key="..\:/AndroidProjects/BarcodeScanner/app/src/main/res/layout/custom_toolbar.xml" value="0.264" />
         <entry key="..\:/AndroidProjects/BarcodeScanner/app/src/main/res/layout/custom_toolbar_cart.xml" value="0.2" />
         <entry key="..\:/AndroidProjects/BarcodeScanner/app/src/main/res/layout/custom_toolbar_search.xml" value="0.264" />
@@ -61,7 +62,7 @@
         <entry key="..\:/AndroidProjects/BarcodeScanner/app/src/main/res/layout/layout_pdf_item.xml" value="0.25" />
         <entry key="..\:/AndroidProjects/BarcodeScanner/app/src/main/res/layout/layout_single_report_item.xml" value="0.25" />
         <entry key="..\:/AndroidProjects/BarcodeScanner/app/src/main/res/layout/layout_user_item.xml" value="0.30648148148148147" />
-        <entry key="..\:/AndroidProjects/BarcodeScanner/app/src/main/res/layout/layout_vendor_item.xml" value="0.144" />
+        <entry key="..\:/AndroidProjects/BarcodeScanner/app/src/main/res/layout/layout_vendor_item.xml" value="0.25" />
         <entry key="..\:/AndroidProjects/BarcodeScanner/app/src/main/res/layout/modal_bottom_sheet_content.xml" value="0.23229166666666667" />
         <entry key="..\:/AndroidProjects/BarcodeScanner/app/src/main/res/layout/pdf_footer_layout.xml" value="0.30648148148148147" />
         <entry key="..\:/AndroidProjects/BarcodeScanner/app/src/main/res/layout/view_list.xml" value="0.30648148148148147" />

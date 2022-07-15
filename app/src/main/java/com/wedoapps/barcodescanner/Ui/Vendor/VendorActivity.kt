@@ -24,6 +24,7 @@ import com.wedoapps.barcodescanner.Ui.Vendor.BottomSheets.PaymentBottomSheet
 import com.wedoapps.barcodescanner.Utils.BarcodeApplication
 import com.wedoapps.barcodescanner.Utils.Constants
 import com.wedoapps.barcodescanner.Utils.Constants.VENDOR_DATA
+import com.wedoapps.barcodescanner.Utils.SwipeHelper.SwipeHelper
 import com.wedoapps.barcodescanner.Utils.ViewModelProviderFactory
 import com.wedoapps.barcodescanner.databinding.ActivityVendorBinding
 import java.util.*
@@ -157,6 +158,41 @@ class VendorActivity : AppCompatActivity(), VendorAdapter.OnVendorClick,
                 }
             }
         }
+        object : SwipeHelper(this, binding.rvVendorList, true) {
+            override fun instantiateUnderlayButton(
+                viewHolder: RecyclerView.ViewHolder?,
+                underlayButtons: MutableList<UnderlayButton>?
+            ) {
+                underlayButtons?.add(UnderlayButton(
+                    "Delete",
+                    AppCompatResources.getDrawable(
+                        this@VendorActivity,
+                        R.drawable.ic_delete
+                    ),
+                    ContextCompat.getColor(this@VendorActivity, R.color.gd_center),
+                    Color.parseColor("#ffffff")
+                ) { pos: Int ->
+                    getDeleteItemDialog(adapterVendor.dataList!![pos])
+                })
+
+                // Flag Button
+                underlayButtons?.add(UnderlayButton(
+                    "Edit",
+                    AppCompatResources.getDrawable(
+                        this@VendorActivity,
+                        R.drawable.ic_edit
+                    ),
+                    ContextCompat.getColor(this@VendorActivity, R.color.colorPrimary),
+                    Color.parseColor("#000000")
+                ) { pos: Int ->
+                    val addVendor = AddVendorBottomSheet()
+                    val bundle = Bundle()
+                    bundle.putParcelable(VENDOR_DATA, adapterVendor.dataList?.get(pos))
+                    addVendor.arguments = bundle
+                    addVendor.show(supportFragmentManager, addVendor.tag)
+                })
+            }
+        }
     }
 
     override fun onAddPayment(vendor: VendorModel) {
@@ -168,11 +204,7 @@ class VendorActivity : AppCompatActivity(), VendorAdapter.OnVendorClick,
     }
 
     override fun onEdit(vendor: VendorModel) {
-        val addVendor = AddVendorBottomSheet()
-        val bundle = Bundle()
-        bundle.putParcelable(VENDOR_DATA, vendor)
-        addVendor.arguments = bundle
-        addVendor.show(supportFragmentManager, addVendor.tag)
+
     }
 
     override fun onDelete(vendor: VendorModel) {

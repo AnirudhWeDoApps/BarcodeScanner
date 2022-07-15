@@ -40,7 +40,7 @@
     <string name="paid">Paid:</string>
     <string name="total_amount">Total Amount:</string>
     <string name="total">Total:</string>
-    <string name="buyer_report">Buyer Report</string>
+    <string name="vendor_report">Vendor Report</string>
     <string name="single_report">Single Report</string>
     <string name="start_date">Start Date</string>
     <string name="end_date">End Date</string>
@@ -51,6 +51,6 @@
     <string name="date_range">Date Range</string>
     <string name="last_month">Last Month</string>
     <string name="last_week">Last Week</string>
-    <string name="single_day">Single Day</string>
+    <string name="yesterday">Yesterday</string>
     <string name="this_month">This Month</string>
 </resources>

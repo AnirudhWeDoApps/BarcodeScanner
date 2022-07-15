@@ -3,14 +3,12 @@ package com.wedoapps.barcodescanner.Adapter
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.recyclerview.widget.AsyncListDiffer
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.wedoapps.barcodescanner.Model.SingleReportModel
 import com.wedoapps.barcodescanner.R
 import com.wedoapps.barcodescanner.databinding.LayoutSingleReportItemBinding
 
-class ReportSingleItemAdapter :
+class ReportSingleItemAdapter(var dataList: ArrayList<SingleReportModel>?) :
     RecyclerView.Adapter<ReportSingleItemAdapter.ReportSingleItemViewHolder>() {
 
     inner class ReportSingleItemViewHolder(private val binding: LayoutSingleReportItemBinding) :
@@ -21,12 +19,12 @@ class ReportSingleItemAdapter :
                 tvSingleItemCount.text = ("${bindingAdapterPosition + 1}.").toString()
                 tvSingleItemName.text = singleReportModel.itemName
                 tvSingleItemBarcode.text = singleReportModel.barcodeNumber
-                tvSingleItemSinglePrice.text =
+                tvSingleItemDuePrice.text =
                     "${itemView.context.getString(R.string.Rs)}${singleReportModel.itemPrice.toString()}"
-                tvSingleItemQuantity.text = "${singleReportModel.quantity} x"
+                tvSingleItemPaidPrice.text = "qty: ${singleReportModel.quantity}"
 
                 tvSingleItemTotalPrice.text =
-                    "${itemView.context.getString(R.string.Rs)}${
+                    "Total: ${itemView.context.getString(R.string.Rs)}${
                         (singleReportModel.itemPrice?.times(
                             singleReportModel.quantity!!
                         ))
@@ -47,7 +45,7 @@ class ReportSingleItemAdapter :
     }
 
     override fun onBindViewHolder(holder: ReportSingleItemViewHolder, position: Int) {
-        val currenItem = differ.currentList[position]
+        val currenItem = dataList?.get(position)
 
         if (currenItem != null) {
             holder.bind(currenItem)
@@ -55,10 +53,10 @@ class ReportSingleItemAdapter :
     }
 
     override fun getItemCount(): Int {
-        return differ.currentList.size
+        return dataList?.size ?: 0
     }
 
-    private val differCallback = object : DiffUtil.ItemCallback<SingleReportModel>() {
+    /*private val differCallback = object : DiffUtil.ItemCallback<SingleReportModel>() {
         override fun areItemsTheSame(
             oldItem: SingleReportModel,
             newItem: SingleReportModel
@@ -74,6 +72,10 @@ class ReportSingleItemAdapter :
         }
     }
 
-    val differ = AsyncListDiffer(this, differCallback)
+    val differ = AsyncListDiffer(this, differCallback)*/
 
+    fun filterList(filteredList: ArrayList<SingleReportModel>) {
+        dataList = filteredList
+        notifyDataSetChanged()
+    }
 }

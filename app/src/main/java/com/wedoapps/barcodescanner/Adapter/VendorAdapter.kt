@@ -9,7 +9,7 @@ import com.wedoapps.barcodescanner.R
 import com.wedoapps.barcodescanner.databinding.LayoutVendorItemBinding
 
 class VendorAdapter(
-    private var dataList: ArrayList<VendorModel>?,
+    var dataList: ArrayList<VendorModel>?,
     val listener: OnVendorClick
 ) :
     RecyclerView.Adapter<VendorAdapter.VendorViewHolder>() {

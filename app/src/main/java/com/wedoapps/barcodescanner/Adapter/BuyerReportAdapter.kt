@@ -5,15 +5,16 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.wedoapps.barcodescanner.Model.BuyerReportModal
+import com.wedoapps.barcodescanner.Model.VendorModel
 import com.wedoapps.barcodescanner.R
 import com.wedoapps.barcodescanner.databinding.LayoutSingleReportItemBinding
 
-class BuyerReportAdapter(private val listener: OnBuyerClick) : RecyclerView.Adapter<BuyerReportAdapter.BuyerReportViewHolder>() {
+class BuyerReportAdapter(private val listener: OnBuyerClick) :
+    RecyclerView.Adapter<BuyerReportAdapter.BuyerReportViewHolder>() {
 
     inner class BuyerReportViewHolder(private val binding: LayoutSingleReportItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(buyerReportModal: BuyerReportModal) {
+        fun bind(buyerReportModal: VendorModel) {
             binding.apply {
                 tvSingleItemCount.text = ("${bindingAdapterPosition + 1}.").toString()
                 tvSingleItemName.text = buyerReportModal.name
@@ -23,21 +24,23 @@ class BuyerReportAdapter(private val listener: OnBuyerClick) : RecyclerView.Adap
                     "Mob no.: ${buyerReportModal.phoneNumber}"
                 }
                 tvSingleItemTotalPrice.text =
-                    "${itemView.context.getString(R.string.Rs)} ${buyerReportModal.total}"
-                tvSingleItemSinglePrice.text = "Time: ${buyerReportModal.time}"
+                    "Total Amt: ${itemView.context.getString(R.string.Rs)} ${buyerReportModal.payment}"
+                tvSingleItemPaidPrice.text =
+                    "Paid Amt:${itemView.context.getString(R.string.Rs)} ${buyerReportModal.paidPayment}"
+                tvSingleItemDuePrice.text =
+                    "Due Amt: ${itemView.context.getString(R.string.Rs)} ${buyerReportModal.duePayment}"
 
                 root.setOnClickListener {
                     val position = bindingAdapterPosition
-                    if(position != RecyclerView.NO_POSITION) {
+                    if (position != RecyclerView.NO_POSITION) {
                         val item = differ.currentList[position]
-                        if(item != null) {
+                        if (item != null) {
                             listener.onClick(item)
                         }
                     }
                 }
             }
         }
-
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BuyerReportViewHolder {
@@ -61,17 +64,17 @@ class BuyerReportAdapter(private val listener: OnBuyerClick) : RecyclerView.Adap
         return differ.currentList.size
     }
 
-    private val differCallback = object : DiffUtil.ItemCallback<BuyerReportModal>() {
+    private val differCallback = object : DiffUtil.ItemCallback<VendorModel>() {
         override fun areItemsTheSame(
-            oldItem: BuyerReportModal,
-            newItem: BuyerReportModal
+            oldItem: VendorModel,
+            newItem: VendorModel
         ): Boolean {
             return oldItem.id == newItem.id
         }
 
         override fun areContentsTheSame(
-            oldItem: BuyerReportModal,
-            newItem: BuyerReportModal
+            oldItem: VendorModel,
+            newItem: VendorModel
         ): Boolean {
             return oldItem == newItem
         }
@@ -80,6 +83,6 @@ class BuyerReportAdapter(private val listener: OnBuyerClick) : RecyclerView.Adap
     val differ = AsyncListDiffer(this, differCallback)
 
     interface OnBuyerClick {
-        fun onClick(buyerReportModal: BuyerReportModal)
+        fun onClick(VendorModel: VendorModel)
     }
 }
