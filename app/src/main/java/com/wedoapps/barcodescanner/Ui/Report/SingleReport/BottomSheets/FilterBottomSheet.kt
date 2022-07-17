@@ -14,6 +14,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.wedoapps.barcodescanner.R
 import com.wedoapps.barcodescanner.Utils.Constants.ALL
 import com.wedoapps.barcodescanner.Utils.Constants.DATE_RANGE
+import com.wedoapps.barcodescanner.Utils.Constants.FILTER_TYPE
 import com.wedoapps.barcodescanner.Utils.Constants.LAST_MONTH
 import com.wedoapps.barcodescanner.Utils.Constants.LAST_WEEK
 import com.wedoapps.barcodescanner.Utils.Constants.THIS_DAY
@@ -48,33 +49,57 @@ class FilterBottomSheet : BottomSheetDialogFragment() {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentBottomSheetFilterBinding.bind(view)
 
-         binding.apply {
-             radioThisMonth.setOnClickListener {
-                 listener.onSelect(THIS_MONTH)
-                 dismiss()
-             }
-             radioAll.setOnClickListener {
-                 listener.onSelect(ALL)
-                 dismiss()
-             }
-             radioDateRange.setOnClickListener {
-                 listener.onSelect(DATE_RANGE)
-                 dismiss()
-             }
-             radioLastMonth.setOnClickListener {
-                 listener.onSelect(LAST_MONTH)
-                 dismiss()
-             }
-             radioLastWeek.setOnClickListener {
-                 listener.onSelect(LAST_WEEK)
-                 dismiss()
-             }
-             radioSingleDay.setOnClickListener {
-                 listener.onSelect(THIS_DAY)
-                 dismiss()
-             }
-         }
+        val filterType = arguments?.getString(FILTER_TYPE)
+        val radionGrp = binding.radioGrp
+//        radionGrp.clearCheck()
 
+        if (!filterType.isNullOrEmpty()) {
+            when (filterType) {
+                ALL -> binding.radioAll.isChecked = true
+                DATE_RANGE -> binding.radioDateRange.isChecked = true
+                THIS_DAY -> binding.radioSingleDay.isChecked = true
+                LAST_MONTH -> binding.radioLastMonth.isChecked = true
+                LAST_WEEK -> binding.radioLastWeek.isChecked = true
+                THIS_MONTH -> binding.radioThisMonth.isChecked = true
+            }
+        } else {
+            radionGrp.clearCheck()
+        }
+
+        radionGrp.setOnCheckedChangeListener { radioGroup, i ->
+            val radioButton: RadioButton = radioGroup.findViewById(i)
+            when (radioButton.id) {
+                R.id.radio_all -> {
+                    listener.onSelect(ALL)
+                    dismiss()
+                }
+
+                R.id.radio_date_range -> {
+                    listener.onSelect(DATE_RANGE)
+                    dismiss()
+                }
+
+                R.id.radio_this_month -> {
+                    listener.onSelect(THIS_MONTH)
+                    dismiss()
+                }
+
+                R.id.radio_last_month -> {
+                    listener.onSelect(LAST_MONTH)
+                    dismiss()
+                }
+
+                R.id.radio_last_week -> {
+                    listener.onSelect(LAST_WEEK)
+                    dismiss()
+                }
+
+                R.id.radio_single_day -> {
+                    listener.onSelect(THIS_DAY)
+                    dismiss()
+                }
+            }
+        }
     }
 
     interface OnFilterOptionSelected {

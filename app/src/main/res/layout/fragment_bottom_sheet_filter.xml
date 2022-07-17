@@ -39,7 +39,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_title">
 
-        <com.google.android.material.radiobutton.MaterialRadioButton
+        <RadioButton
             android:id="@+id/radio_all"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -48,7 +48,7 @@
             android:layoutDirection="rtl"
             android:text="@string/all" />
 
-        <com.google.android.material.radiobutton.MaterialRadioButton
+        <RadioButton
             android:id="@+id/radio_this_month"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -57,7 +57,7 @@
             android:layoutDirection="rtl"
             android:text="@string/this_month" />
 
-        <com.google.android.material.radiobutton.MaterialRadioButton
+        <RadioButton
             android:id="@+id/radio_single_day"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -66,7 +66,7 @@
             android:layoutDirection="rtl"
             android:text="@string/yesterday" />
 
-        <com.google.android.material.radiobutton.MaterialRadioButton
+        <RadioButton
             android:id="@+id/radio_last_week"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -75,7 +75,7 @@
             android:layoutDirection="rtl"
             android:text="@string/last_week" />
 
-        <com.google.android.material.radiobutton.MaterialRadioButton
+        <RadioButton
             android:id="@+id/radio_last_month"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -84,7 +84,7 @@
             android:layoutDirection="rtl"
             android:text="@string/last_month" />
 
-        <com.google.android.material.radiobutton.MaterialRadioButton
+        <RadioButton
             android:id="@+id/radio_date_range"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

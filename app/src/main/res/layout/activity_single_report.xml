@@ -164,7 +164,7 @@
             android:text="@string/search"
             android:textAllCaps="false"
             android:textColor="@color/ColorPrimaryTextColor"
-            android:visibility="visible"
+            android:visibility="gone"
             app:backgroundTint="@color/white"
             app:icon="@drawable/ic_search"
             app:iconGravity="textStart"

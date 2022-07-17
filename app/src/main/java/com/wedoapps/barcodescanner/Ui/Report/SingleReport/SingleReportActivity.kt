@@ -1,22 +1,23 @@
 package com.wedoapps.barcodescanner.Ui.Report.SingleReport
 
 import android.annotation.SuppressLint
-import android.app.DatePickerDialog
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
+import com.google.android.material.datepicker.CalendarConstraints
+import com.google.android.material.datepicker.DateValidatorPointForward
+import com.google.android.material.datepicker.MaterialDatePicker
 import com.wedoapps.barcodescanner.Adapter.ReportSingleItemAdapter
 import com.wedoapps.barcodescanner.BarcodeViewModel
 import com.wedoapps.barcodescanner.Model.SingleReportModel
-import com.wedoapps.barcodescanner.R
 import com.wedoapps.barcodescanner.Ui.Report.SingleReport.BottomSheets.FilterBottomSheet
 import com.wedoapps.barcodescanner.Utils.BarcodeApplication
 import com.wedoapps.barcodescanner.Utils.Constants.ALL
 import com.wedoapps.barcodescanner.Utils.Constants.DATE_RANGE
+import com.wedoapps.barcodescanner.Utils.Constants.FILTER_TYPE
 import com.wedoapps.barcodescanner.Utils.Constants.LAST_MONTH
 import com.wedoapps.barcodescanner.Utils.Constants.LAST_WEEK
 import com.wedoapps.barcodescanner.Utils.Constants.TAG
@@ -39,10 +40,11 @@ class SingleReportActivity : AppCompatActivity(), FilterBottomSheet.OnFilterOpti
 
     @SuppressLint("SimpleDateFormat")
     var dfDate = SimpleDateFormat("dd/MM/yyyy")
+    var dfDateForDB = SimpleDateFormat("yyyy-MM-dd")
     private lateinit var adapterSingleItem: ReportSingleItemAdapter
     private lateinit var itemList: ArrayList<SingleReportModel>
-    private lateinit var datePickerTO: DatePickerDialog
-    private lateinit var datePickerFROM: DatePickerDialog
+    private lateinit var datePickerStart: MaterialDatePicker<Long>
+    private lateinit var datePickerTO: MaterialDatePicker<Long>
     private var fromDate: String? = null ?: ""
     private var toDate: String? = null ?: ""
 
@@ -66,86 +68,38 @@ class SingleReportActivity : AppCompatActivity(), FilterBottomSheet.OnFilterOpti
         binding.toolbar.ivBack.setOnClickListener {
             finish()
         }
-
-        val calendar = Calendar.getInstance()
-
-        val year = calendar.get(Calendar.YEAR)
-        val month = calendar.get(Calendar.MONTH)
-        val day = calendar.get(Calendar.DAY_OF_MONTH)
-        binding.tvStartDate.text = dfDate.format(System.currentTimeMillis())
-        binding.tvEndDate.text = dfDate.format(System.currentTimeMillis())
-
-        datePickerFROM =
-            DatePickerDialog(
-                this,
-                R.style.DialogTheme,
-                { _, yearDP, monthOfYear, dayOfMonth ->
-                    val fmonth = monthOfYear + 1
-                    var fm = "" + fmonth
-                    var fd = "" + dayOfMonth
-                    if (fmonth < 10) {
-                        fm = "0$fmonth"
-                    }
-                    if (dayOfMonth < 10) {
-                        fd = "0$dayOfMonth"
-                    }
-                    val fromDate = "$fd/$fm/$yearDP"
-                    binding.tvStartDate.text = fromDate
-                },
-                year,
-                month,
-                day
-            )
-        datePickerFROM.setTitle("Start Date")
-
+        val constraintsBuilder = CalendarConstraints.Builder()
+            .setValidator(DateValidatorPointForward.now())
+        datePickerStart =
+            MaterialDatePicker.Builder.datePicker().setTitleText("Start Date").build()
         datePickerTO =
-            DatePickerDialog(
-                this,
-                R.style.DialogTheme,
-                { _, yearDP, monthOfYear, dayOfMonth ->
-                    val fmonth = monthOfYear + 1
-                    var fm = "" + fmonth
-                    var fd = "" + dayOfMonth
-                    if (fmonth < 10) {
-                        fm = "0$fmonth"
-                    }
-                    if (dayOfMonth < 10) {
-                        fd = "0$dayOfMonth"
-                    }
-                    val toDate = "$fd/$fm/$yearDP"
-                    binding.tvEndDate.text = toDate
-
-                },
-                year,
-                month,
-                day
-            )
-        datePickerTO.setTitle("End Date")
-        datePickerTO.datePicker.minDate = calendar.timeInMillis
+            MaterialDatePicker.Builder.datePicker()
+                .setCalendarConstraints(constraintsBuilder.build())
+                .setTitleText("End Date").build()
 
         binding.tvStartDate.setOnClickListener {
-            val cancelColor = ContextCompat.getColor(this, R.color.gd_center)
-            val okColor = ContextCompat.getColor(this, R.color.gd_center)
-            datePickerFROM.show()
-            datePickerFROM.getButton(DatePickerDialog.BUTTON_POSITIVE).setTextColor(okColor)
-            datePickerFROM.getButton(DatePickerDialog.BUTTON_NEGATIVE)
-                .setTextColor(cancelColor)
-            datePickerFROM.getButton(DatePickerDialog.BUTTON_POSITIVE).setOnClickListener {
-                datePickerFROM.cancel()
-            }
+            datePickerStart()
         }
 
         binding.tvEndDate.setOnClickListener {
-            val cancelColor = ContextCompat.getColor(this, R.color.gd_center)
-            val okColor = ContextCompat.getColor(this, R.color.gd_center)
-            datePickerTO.show()
-            datePickerTO.getButton(DatePickerDialog.BUTTON_POSITIVE).setTextColor(okColor)
-            datePickerTO.getButton(DatePickerDialog.BUTTON_NEGATIVE).setTextColor(cancelColor)
-            datePickerTO.getButton(DatePickerDialog.BUTTON_POSITIVE).setOnClickListener {
+            datePickerTO.show(supportFragmentManager, datePickerTO.tag)
+            datePickerTO.addOnPositiveButtonClickListener {
+                val dateFormatter = SimpleDateFormat("dd/MM/yyyy")
+                val dateFormatterForDB = SimpleDateFormat("yyyy-MM-dd")
+                toDate = dateFormatterForDB.format(Date(it))
+                val date = dateFormatter.format(Date(it))
+                binding.tvEndDate.text = date
+                Log.d(TAG, "EndDate: $date")
                 sendDataRequest(DATE_RANGE)
-                datePickerTO.cancel()
+                datePickerTO.dismiss()
             }
         }
+
+        fromDate = dfDateForDB.format(System.currentTimeMillis())
+        toDate = dfDateForDB.format(System.currentTimeMillis())
+
+        binding.tvStartDate.text = dfDate.format(System.currentTimeMillis())
+        binding.tvEndDate.text = dfDate.format(System.currentTimeMillis())
 
         binding.btnSearch.setOnClickListener {
             sendDataRequest(DATE_RANGE)
@@ -162,6 +116,9 @@ class SingleReportActivity : AppCompatActivity(), FilterBottomSheet.OnFilterOpti
 
         binding.tvFilter.setOnClickListener {
             val filter = FilterBottomSheet()
+            val bundle = Bundle()
+            bundle.putString(FILTER_TYPE, binding.tvFilter.text.toString())
+            filter.arguments = bundle
             filter.show(supportFragmentManager, filter.tag)
         }
 
@@ -254,6 +211,19 @@ class SingleReportActivity : AppCompatActivity(), FilterBottomSheet.OnFilterOpti
         Log.d(TAG, "sendDataRequest: $type, $fromDate, $toDate")
     }
 
+    private fun datePickerStart() {
+        datePickerStart.show(supportFragmentManager, datePickerStart.tag)
+        datePickerStart.addOnPositiveButtonClickListener {
+            val dateFormatter = SimpleDateFormat("dd/MM/yyyy")
+            val dateFormatterForDB = SimpleDateFormat("yyyy-MM-dd")
+            fromDate = dateFormatterForDB.format(Date(it))
+            val date = dateFormatter.format(Date(it))
+            binding.tvStartDate.text = date
+            Log.d(TAG, "StartDate: $date")
+            sendDataRequest(DATE_RANGE)
+        }
+    }
+
     override fun onSelect(type: String) {
         when (type) {
             ALL -> {
@@ -277,7 +247,7 @@ class SingleReportActivity : AppCompatActivity(), FilterBottomSheet.OnFilterOpti
                 binding.tvFilter.text = LAST_MONTH
             }
             DATE_RANGE -> {
-                datePickerFROM.show()
+                datePickerStart()
                 binding.tvFilter.text = DATE_RANGE
             }
         }

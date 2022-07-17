@@ -12,10 +12,8 @@ object Constants {
     const val SP_NAME = "Sp"
     const val NAME = "Name"
     const val VENDOR_NAME = "VendorName"
-    const val DOWNLOAD = 1
-    const val SHARE = 0
     const val PDF_DATA = "PdfData"
-    const val REPORT_DATA = "ReportData"
+    const val FILTER_TYPE = "FilterType"
     const val IS_NEW = "isNew"
     const val REQUEST_CODE = 1
     const val HISTORY_DATA = "HistoryData"
