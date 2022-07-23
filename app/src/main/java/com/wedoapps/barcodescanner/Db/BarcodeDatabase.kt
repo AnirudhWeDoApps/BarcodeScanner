@@ -40,7 +40,6 @@ abstract class BarcodeDatabase : RoomDatabase() {
                 BarcodeDatabase::class.java,
                 "Barcode.db"
             ).addMigrations(MIGRATION_1_2)
-                .fallbackToDestructiveMigration()
                 .build()
     }
 

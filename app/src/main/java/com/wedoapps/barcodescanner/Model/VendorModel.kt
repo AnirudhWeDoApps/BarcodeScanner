@@ -18,7 +18,8 @@ data class VendorModel(
     var pincode: String? = "",
     var payment: Int? = null,
     var paidPayment: Int? = null,
-    var duePayment: Int? = null
+    var duePayment: Int? = null,
+    var showMenu: Boolean? = false
 ) : Parcelable {
 
 

@@ -25,9 +25,10 @@ import com.wedoapps.barcodescanner.Model.ScannedData
 import com.wedoapps.barcodescanner.R
 import com.wedoapps.barcodescanner.Ui.Cart.CartActivity
 import com.wedoapps.barcodescanner.Ui.Fragments.AddItemAlertDialog
-import com.wedoapps.barcodescanner.Ui.Search.SearchActivity
+import com.wedoapps.barcodescanner.Ui.Stock.StockActivity
 import com.wedoapps.barcodescanner.Utils.BarcodeApplication
 import com.wedoapps.barcodescanner.Utils.Constants.BARCODE
+import com.wedoapps.barcodescanner.Utils.Constants.FROM
 import com.wedoapps.barcodescanner.Utils.Constants.TAG
 import com.wedoapps.barcodescanner.Utils.ViewModelProviderFactory
 import com.wedoapps.barcodescanner.databinding.ActivityMainBinding
@@ -60,6 +61,7 @@ class MainActivity : AppCompatActivity(), MainDataRecyclerAdapter.OnClick,
     private lateinit var layout: View
     private var beepManager: BeepManager? = null
     private val mainScope = CoroutineScope(Dispatchers.Main)
+    private lateinit var from: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -67,6 +69,8 @@ class MainActivity : AppCompatActivity(), MainDataRecyclerAdapter.OnClick,
         val view = binding.root
         layout = binding.mainLayout
         setContentView(view)
+
+        from = intent.getStringExtra(FROM).toString()
 
 //        onClickRequestPermission(view)
         val toolbar = binding.toolbar.customToolbar
@@ -83,8 +87,9 @@ class MainActivity : AppCompatActivity(), MainDataRecyclerAdapter.OnClick,
         }
 
         binding.toolbar.ivAddUsers.setOnClickListener {
-            startActivity(Intent(this, SearchActivity::class.java))
-
+            val intent = Intent(this, StockActivity::class.java)
+            intent.putExtra(FROM, "main")
+            startActivity(intent)
         }
 
 
@@ -102,6 +107,7 @@ class MainActivity : AppCompatActivity(), MainDataRecyclerAdapter.OnClick,
                 val addItemDialog = AddItemAlertDialog()
                 val bundle = Bundle()
                 bundle.putString(BARCODE, it?.barcodeNumber)
+                bundle.putString(FROM, from)
                 addItemDialog.arguments = bundle
                 addItemDialog.show(supportFragmentManager, addItemDialog.tag)
                 binding.scannerData.pause()

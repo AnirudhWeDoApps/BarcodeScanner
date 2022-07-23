@@ -1,6 +1,8 @@
 package com.wedoapps.barcodescanner.Ui.Vendor
 
+import android.graphics.Canvas
 import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
@@ -14,6 +16,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.wedoapps.barcodescanner.Adapter.VendorAdapter
 import com.wedoapps.barcodescanner.BarcodeViewModel
@@ -24,10 +27,10 @@ import com.wedoapps.barcodescanner.Ui.Vendor.BottomSheets.PaymentBottomSheet
 import com.wedoapps.barcodescanner.Utils.BarcodeApplication
 import com.wedoapps.barcodescanner.Utils.Constants
 import com.wedoapps.barcodescanner.Utils.Constants.VENDOR_DATA
-import com.wedoapps.barcodescanner.Utils.SwipeHelper.SwipeHelper
 import com.wedoapps.barcodescanner.Utils.ViewModelProviderFactory
 import com.wedoapps.barcodescanner.databinding.ActivityVendorBinding
 import java.util.*
+
 
 class VendorActivity : AppCompatActivity(), VendorAdapter.OnVendorClick,
     AddVendorBottomSheet.OnWorkDone {
@@ -53,8 +56,6 @@ class VendorActivity : AppCompatActivity(), VendorAdapter.OnVendorClick,
         setSupportActionBar(toolbar)
         title.text = toolbar.title
         supportActionBar?.setDisplayShowTitleEnabled(false)
-
-
 
         binding.toolbarVendor.ivBack.setOnClickListener {
             finish()
@@ -82,6 +83,65 @@ class VendorActivity : AppCompatActivity(), VendorAdapter.OnVendorClick,
             val addVendor = AddVendorBottomSheet()
             addVendor.show(supportFragmentManager, addVendor.tag)
         }
+
+        val touchHelperCallback: ItemTouchHelper.SimpleCallback =
+            object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
+                private val background = ColorDrawable(Color.WHITE)
+
+                override fun onMove(
+                    recyclerView: RecyclerView,
+                    viewHolder: RecyclerView.ViewHolder,
+                    target: RecyclerView.ViewHolder
+                ): Boolean {
+                    return false
+                }
+
+                override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                    adapterVendor.showMenu(viewHolder.bindingAdapterPosition)
+                }
+
+                override fun onChildDraw(
+                    c: Canvas,
+                    recyclerView: RecyclerView,
+                    viewHolder: RecyclerView.ViewHolder,
+                    dX: Float,
+                    dY: Float,
+                    actionState: Int,
+                    isCurrentlyActive: Boolean
+                ) {
+                    super.onChildDraw(
+                        c,
+                        recyclerView,
+                        viewHolder,
+                        dX,
+                        dY,
+                        actionState,
+                        isCurrentlyActive
+                    )
+                    val itemView = viewHolder.itemView
+                    if (dX > 0) {
+                        background.setBounds(
+                            itemView.left,
+                            itemView.top,
+                            itemView.left + dX.toInt(),
+                            itemView.bottom
+                        )
+                    } else if (dX < 0) {
+                        background.setBounds(
+                            itemView.right + dX.toInt(),
+                            itemView.top,
+                            itemView.right,
+                            itemView.bottom
+                        )
+                    } else {
+                        background?.setBounds(0, 0, 0, 0)
+                    }
+                    background?.draw(c)
+                }
+            }
+        val itemTouchHelper = ItemTouchHelper(touchHelperCallback)
+        itemTouchHelper.attachToRecyclerView(binding.rvVendorList)
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -158,7 +218,7 @@ class VendorActivity : AppCompatActivity(), VendorAdapter.OnVendorClick,
                 }
             }
         }
-        object : SwipeHelper(this, binding.rvVendorList, true) {
+        /*object : SwipeHelper(this, binding.rvVendorList, true) {
             override fun instantiateUnderlayButton(
                 viewHolder: RecyclerView.ViewHolder?,
                 underlayButtons: MutableList<UnderlayButton>?
@@ -185,14 +245,10 @@ class VendorActivity : AppCompatActivity(), VendorAdapter.OnVendorClick,
                     ContextCompat.getColor(this@VendorActivity, R.color.colorPrimary),
                     Color.parseColor("#000000")
                 ) { pos: Int ->
-                    val addVendor = AddVendorBottomSheet()
-                    val bundle = Bundle()
-                    bundle.putParcelable(VENDOR_DATA, adapterVendor.dataList?.get(pos))
-                    addVendor.arguments = bundle
-                    addVendor.show(supportFragmentManager, addVendor.tag)
+
                 })
             }
-        }
+        }*/
     }
 
     override fun onAddPayment(vendor: VendorModel) {
@@ -204,7 +260,11 @@ class VendorActivity : AppCompatActivity(), VendorAdapter.OnVendorClick,
     }
 
     override fun onEdit(vendor: VendorModel) {
-
+        val addVendor = AddVendorBottomSheet()
+        val bundle = Bundle()
+        bundle.putParcelable(VENDOR_DATA, vendor)
+        addVendor.arguments = bundle
+        addVendor.show(supportFragmentManager, addVendor.tag)
     }
 
     override fun onDelete(vendor: VendorModel) {
@@ -248,6 +308,18 @@ class VendorActivity : AppCompatActivity(), VendorAdapter.OnVendorClick,
 
     override fun onSubmit() {
 
+    }
+
+    override fun onBackClick() {
+        adapterVendor.closeMenu()
+    }
+
+    override fun onBackPressed() {
+        if (adapterVendor.isMenuShown()) {
+            adapterVendor.closeMenu()
+        } else {
+            super.onBackPressed()
+        }
     }
 
 }

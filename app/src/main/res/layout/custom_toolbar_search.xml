@@ -4,8 +4,8 @@
     android:id="@+id/customToolbar"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:theme="@style/AppTheme.Toolbar"
     android:background="@color/colorPrimary"
+    android:theme="@style/AppTheme.Toolbar"
     app:menu="@menu/toolbar_menu">
 
     <LinearLayout

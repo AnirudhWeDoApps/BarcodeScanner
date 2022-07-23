@@ -188,11 +188,11 @@
                 android:background="@drawable/bg_rounded_btn"
                 android:backgroundTint="@color/colorPrimary"
                 android:text="Save"
-                app:layout_constraintStart_toEndOf="@id/btn_close"
                 android:textAllCaps="false"
                 android:textColor="@color/ColorPrimaryTextColor"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/btn_close"
                 app:layout_constraintTop_toBottomOf="@id/input_pincode" />
 
             <androidx.appcompat.widget.AppCompatButton
@@ -204,10 +204,10 @@
                 android:background="@drawable/bg_rounded_btn"
                 android:backgroundTint="@color/ColorSecondaryLight"
                 android:text="Cancel"
-                app:layout_constraintEnd_toStartOf="@id/btn_submit"
                 android:textAllCaps="false"
                 android:textColor="@color/white"
                 app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/btn_submit"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/input_pincode" />
         </androidx.constraintlayout.widget.ConstraintLayout>

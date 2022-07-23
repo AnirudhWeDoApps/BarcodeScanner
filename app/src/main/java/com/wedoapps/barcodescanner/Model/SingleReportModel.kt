@@ -48,7 +48,7 @@ data class SingleReportModel(
         private fun getDate(): String {
             val currentTime: Date = Calendar.getInstance().time
 //            val simpleFormat = SimpleDateFormat("dd MMM yyyy hh:mm")
-            val simpleFormat = SimpleDateFormat("dd/MM/yyyy")
+            val simpleFormat = SimpleDateFormat("yyyy-MM-dd")
             return simpleFormat.format(currentTime)
         }
 
@@ -60,7 +60,7 @@ data class SingleReportModel(
 
         private fun getEpochTime(): String {
             return try {
-                val sdf = SimpleDateFormat("dd/MM/yyyy")
+                val sdf = SimpleDateFormat("yyyy-MM-dd")
                 val netDate = Date(getDate().toLong() * 1000)
                 sdf.format(netDate)
             } catch (e: Exception) {

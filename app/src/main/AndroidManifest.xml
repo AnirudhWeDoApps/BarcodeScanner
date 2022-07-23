@@ -59,7 +59,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.BarcodeScanner" />
         <activity
-            android:name=".Ui.Search.SearchActivity"
+            android:name=".Ui.Stock.StockActivity"
             android:exported="false"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.BarcodeScanner" />

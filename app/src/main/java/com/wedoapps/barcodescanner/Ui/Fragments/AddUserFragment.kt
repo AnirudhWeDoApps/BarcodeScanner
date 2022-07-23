@@ -130,16 +130,16 @@ class AddUserFragment : BottomSheetDialogFragment() {
     private fun validate(): Boolean {
         val userName = binding.inputUser.editText
         val mobileNumber = binding.inputMobileNo.editText
-     /*   val address = binding.inputAddress1.editText
-        val city = binding.inputCity.editText
-        val pincode = binding.inputPincode.editText*/
+        /*   val address = binding.inputAddress1.editText
+           val city = binding.inputCity.editText
+           val pincode = binding.inputPincode.editText*/
 
         // UserName
         if (userName?.text.toString().isEmpty()) {
             userName?.error = "Field Cannot be Empty"
             return false
         }
-        if(mobileNumber?.text.toString().isEmpty()) {
+        if (mobileNumber?.text.toString().isEmpty()) {
             return true
         } else {
             if (mobileNumber?.text.toString().length != 10) {
@@ -160,17 +160,17 @@ class AddUserFragment : BottomSheetDialogFragment() {
              return false
          }*/
 
-       /* // City
-        if (city?.text.toString().isEmpty()) {
-            city?.error = "Field Cannot be Empty"
-            return false
-        }
+        /* // City
+         if (city?.text.toString().isEmpty()) {
+             city?.error = "Field Cannot be Empty"
+             return false
+         }
 
-        // Pincode
-        if (pincode?.text.toString().isEmpty()) {
-            pincode?.error = "Field Cannot be Empty"
-            return false
-        }*/
+         // Pincode
+         if (pincode?.text.toString().isEmpty()) {
+             pincode?.error = "Field Cannot be Empty"
+             return false
+         }*/
 
         return true
     }

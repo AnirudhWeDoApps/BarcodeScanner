@@ -40,9 +40,9 @@ class SingleReportActivity : AppCompatActivity(), FilterBottomSheet.OnFilterOpti
 
     @SuppressLint("SimpleDateFormat")
     var dfDate = SimpleDateFormat("dd/MM/yyyy")
-    var dfDateForDB = SimpleDateFormat("yyyy-MM-dd")
+    private var dfDateForDB = SimpleDateFormat("yyyy-MM-dd")
     private lateinit var adapterSingleItem: ReportSingleItemAdapter
-    private lateinit var itemList: ArrayList<SingleReportModel>
+    private var itemList = arrayListOf<SingleReportModel>()
     private lateinit var datePickerStart: MaterialDatePicker<Long>
     private lateinit var datePickerTO: MaterialDatePicker<Long>
     private var fromDate: String? = null ?: ""
@@ -68,13 +68,18 @@ class SingleReportActivity : AppCompatActivity(), FilterBottomSheet.OnFilterOpti
         binding.toolbar.ivBack.setOnClickListener {
             finish()
         }
+
+        val calendar = Calendar.getInstance().timeInMillis
+
         val constraintsBuilder = CalendarConstraints.Builder()
             .setValidator(DateValidatorPointForward.now())
         datePickerStart =
-            MaterialDatePicker.Builder.datePicker().setTitleText("Start Date").build()
+            MaterialDatePicker.Builder.datePicker().setTitleText("Start Date")
+                .setSelection(calendar).build()
         datePickerTO =
             MaterialDatePicker.Builder.datePicker()
                 .setCalendarConstraints(constraintsBuilder.build())
+                .setSelection(calendar)
                 .setTitleText("End Date").build()
 
         binding.tvStartDate.setOnClickListener {
@@ -84,10 +89,8 @@ class SingleReportActivity : AppCompatActivity(), FilterBottomSheet.OnFilterOpti
         binding.tvEndDate.setOnClickListener {
             datePickerTO.show(supportFragmentManager, datePickerTO.tag)
             datePickerTO.addOnPositiveButtonClickListener {
-                val dateFormatter = SimpleDateFormat("dd/MM/yyyy")
-                val dateFormatterForDB = SimpleDateFormat("yyyy-MM-dd")
-                toDate = dateFormatterForDB.format(Date(it))
-                val date = dateFormatter.format(Date(it))
+                toDate = dfDateForDB.format(Date(it))
+                val date = dfDate .format(Date(it))
                 binding.tvEndDate.text = date
                 Log.d(TAG, "EndDate: $date")
                 sendDataRequest(DATE_RANGE)
@@ -198,7 +201,7 @@ class SingleReportActivity : AppCompatActivity(), FilterBottomSheet.OnFilterOpti
 
     override fun onResume() {
         super.onResume()
-        sendDataRequest(DATE_RANGE)
+        sendDataRequest(ALL)
     }
 
     private fun sendDataRequest(type: String) {

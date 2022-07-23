@@ -26,6 +26,9 @@ object Constants {
     const val LAST_WEEK = "Last Week"
     const val LAST_MONTH = "Last Month"
     const val ALL = "All"
+    const val FROM = "From"
+    const val STOCK_TO_MAIN = "stockToMain"
+    const val DIRECT_MAIN = "Main"
 
     val MIGRATION_1_2: Migration = object : Migration(1, 2) {
         override fun migrate(database: SupportSQLiteDatabase) {

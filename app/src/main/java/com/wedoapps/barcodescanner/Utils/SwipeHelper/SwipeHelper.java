@@ -27,7 +27,8 @@ import java.util.Queue;
 
 public abstract class SwipeHelper extends ItemTouchHelper.SimpleCallback {
 
-    public static final int BUTTON_WIDTH = 200;
+    public static final int BUTTON_WIDTH = 300;
+    private static Boolean animate;
     private RecyclerView recyclerView;
     private List<UnderlayButton> buttons;
     private GestureDetector gestureDetector;
@@ -35,8 +36,6 @@ public abstract class SwipeHelper extends ItemTouchHelper.SimpleCallback {
     private float swipeThreshold = 0.5f;
     private Map<Integer, List<UnderlayButton>> buttonsBuffer;
     private Queue<Integer> recoverQueue;
-    private static Boolean animate;
-
     private GestureDetector.SimpleOnGestureListener gestureListener =
             new GestureDetector.SimpleOnGestureListener() {
                 @Override
@@ -228,6 +227,10 @@ public abstract class SwipeHelper extends ItemTouchHelper.SimpleCallback {
 
     public abstract void instantiateUnderlayButton(RecyclerView.ViewHolder viewHolder, List<UnderlayButton> underlayButtons);
 
+    public interface UnderlayButtonClickListener {
+        void onClick(int pos);
+    }
+
     public static class UnderlayButton {
         private String text;
         private Drawable imageResId;
@@ -324,9 +327,5 @@ public abstract class SwipeHelper extends ItemTouchHelper.SimpleCallback {
             this.pos = pos;
         }
 
-    }
-
-    public interface UnderlayButtonClickListener {
-        void onClick(int pos);
     }
 }

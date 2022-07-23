@@ -41,11 +41,11 @@
         android:id="@+id/fab_addUser"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/_10sdp"
         android:layout_marginBottom="@dimen/_10sdp"
         app:backgroundTint="@color/colorPrimary"
         app:icon="@drawable/ic_user_add"
         app:iconTint="@color/ColorPrimaryTextColor"
-        android:layout_marginEnd="@dimen/_10sdp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 

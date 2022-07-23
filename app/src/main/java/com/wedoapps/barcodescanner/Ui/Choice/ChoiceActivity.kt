@@ -19,11 +19,13 @@ import com.wedoapps.barcodescanner.R
 import com.wedoapps.barcodescanner.Ui.History.HistoryActivity
 import com.wedoapps.barcodescanner.Ui.Report.ReportActivity
 import com.wedoapps.barcodescanner.Ui.Scanner.MainActivity
-import com.wedoapps.barcodescanner.Ui.Search.SearchActivity
+import com.wedoapps.barcodescanner.Ui.Stock.StockActivity
 import com.wedoapps.barcodescanner.Ui.Users.UserListActivity
 import com.wedoapps.barcodescanner.Ui.Vendor.VendorActivity
 import com.wedoapps.barcodescanner.Utils.BarcodeApplication
 import com.wedoapps.barcodescanner.Utils.Constants
+import com.wedoapps.barcodescanner.Utils.Constants.DIRECT_MAIN
+import com.wedoapps.barcodescanner.Utils.Constants.FROM
 import com.wedoapps.barcodescanner.Utils.ViewModelProviderFactory
 import com.wedoapps.barcodescanner.databinding.ActivityChoiceBinding
 
@@ -139,7 +141,9 @@ class ChoiceActivity : AppCompatActivity(), ChoiceAdapter.OnChoiceClick {
     override fun onClick(model: ChoiceModel) {
         when (model.menuItem) {
             getString(R.string.generate_bill) -> {
-                startActivity(Intent(this, MainActivity::class.java))
+                val intent = Intent(this, MainActivity::class.java)
+                intent.putExtra(FROM, DIRECT_MAIN)
+                startActivity(intent)
             }
 
             getString(R.string.add_user_info) -> {
@@ -147,7 +151,9 @@ class ChoiceActivity : AppCompatActivity(), ChoiceAdapter.OnChoiceClick {
             }
 
             getString(R.string.add_update_stock) -> {
-                startActivity(Intent(this, SearchActivity::class.java))
+                val intent = Intent(this, StockActivity::class.java)
+                intent.putExtra(Constants.FROM, "choice")
+                startActivity(intent)
             }
 
             getString(R.string.billing_history) -> {

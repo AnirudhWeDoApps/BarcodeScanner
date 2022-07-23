@@ -1,4 +1,4 @@
-package com.wedoapps.barcodescanner.Ui.Search
+package com.wedoapps.barcodescanner.Ui.Stock
 
 import android.content.Intent
 import android.graphics.Color
@@ -24,12 +24,14 @@ import com.wedoapps.barcodescanner.Ui.Scanner.MainActivity
 import com.wedoapps.barcodescanner.Utils.BarcodeApplication
 import com.wedoapps.barcodescanner.Utils.Constants
 import com.wedoapps.barcodescanner.Utils.Constants.BY_MANUAL
+import com.wedoapps.barcodescanner.Utils.Constants.FROM
 import com.wedoapps.barcodescanner.Utils.Constants.MANUALLY
+import com.wedoapps.barcodescanner.Utils.Constants.STOCK_TO_MAIN
 import com.wedoapps.barcodescanner.Utils.ViewModelProviderFactory
 import com.wedoapps.barcodescanner.databinding.ActivitySearchBinding
 import java.util.*
 
-class SearchActivity : AppCompatActivity(), BarcodeDataRecyclerAdapter.OnClick,
+class StockActivity : AppCompatActivity(), BarcodeDataRecyclerAdapter.OnClick,
     AddItemAlertDialog.OnSheetWork {
 
     private lateinit var binding: ActivitySearchBinding
@@ -42,16 +44,17 @@ class SearchActivity : AppCompatActivity(), BarcodeDataRecyclerAdapter.OnClick,
     private lateinit var itemListAdapter: BarcodeDataRecyclerAdapter
     private var barcodeEntryList: ArrayList<BarcodeEntryItem> = arrayListOf()
     private lateinit var searchItem: MenuItem
-
+    private lateinit var from: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySearchBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        from = intent.getStringExtra(FROM).toString()
+
         val toolbar = binding.toolbar.customToolbar
         val title = binding.toolbar.toolbarTitle
-
         setSupportActionBar(toolbar)
         title.text = toolbar.title
         supportActionBar?.setDisplayShowTitleEnabled(false)
@@ -113,12 +116,16 @@ class SearchActivity : AppCompatActivity(), BarcodeDataRecyclerAdapter.OnClick,
         searchHint.setTextColor(Color.BLACK)
         searchIcon.setImageDrawable(AppCompatResources.getDrawable(this, R.drawable.ic_search))
         cancelIcon.setImageDrawable(AppCompatResources.getDrawable(this, R.drawable.ic_close))
-
-        searchItem.expandActionView()
         searchView.isIconified = false
         searchView.isFocusable = true
         searchView.requestFocusFromTouch()
         searchView.queryHint = "Search Item"
+        if (from == "main") {
+            searchItem.expandActionView()
+        } else {
+            searchItem.collapseActionView()
+            searchView.isIconified = true
+        }
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
                 if (!searchView.isIconified) {
@@ -241,6 +248,7 @@ class SearchActivity : AppCompatActivity(), BarcodeDataRecyclerAdapter.OnClick,
             fabManually.setOnClickListener {
                 val addItemDialog = AddItemAlertDialog()
                 val bundle = Bundle()
+                // to add stock manually and do not add it in scanner activity
                 bundle.putString(BY_MANUAL, MANUALLY)
                 addItemDialog.arguments = bundle
                 addItemDialog.show(supportFragmentManager, addItemDialog.tag)
@@ -248,7 +256,9 @@ class SearchActivity : AppCompatActivity(), BarcodeDataRecyclerAdapter.OnClick,
             }
 
             fabScanner.setOnClickListener {
-                startActivity(Intent(this@SearchActivity, MainActivity::class.java))
+                val intent = Intent(this@StockActivity, MainActivity::class.java)
+                intent.putExtra(FROM, STOCK_TO_MAIN)
+                startActivity(intent)
                 fabAdd.collapse()
             }
         }

@@ -11,10 +11,10 @@ import com.wedoapps.barcodescanner.Adapter.PDFFooterAdapter
 import com.wedoapps.barcodescanner.Adapter.PDFHeaderAdapter
 import com.wedoapps.barcodescanner.Model.PDFData
 import com.wedoapps.barcodescanner.R
+import com.wedoapps.barcodescanner.Ui.PdfGenerate.PDFActivity
 import com.wedoapps.barcodescanner.Utils.Constants.HISTORY_DATA
 import com.wedoapps.barcodescanner.Utils.Constants.IS_NEW
 import com.wedoapps.barcodescanner.Utils.Constants.PDF_DATA
-import com.wedoapps.barcodescanner.Ui.PdfGenerate.PDFActivity
 import com.wedoapps.barcodescanner.databinding.ActivitySingleHistoryBinding
 
 class SingleHistoryActivity : AppCompatActivity() {
